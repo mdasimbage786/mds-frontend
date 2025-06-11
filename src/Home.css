@@ -1,0 +1,186 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.home-container {
+  min-height: fit-content;
+  padding: 20px;
+  background-image: url("/public/med3.jpg");
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: 40px;
+  color: rgb(0, 0, 0);
+}
+
+.home-header h1 {
+  margin-bottom: 40px;
+  font-size: 2.5rem;
+  color: #000000;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+}
+
+.home-description {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 40px;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 18px;
+  line-height: 1.6;
+  color: #fff;
+  position: relative;
+}
+
+.image-container {
+  position: relative;
+}
+
+.description-image {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.button-container {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.button-container a {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  text-align: center;
+  width: 200px; /* Optional: To make buttons the same width */
+}
+
+.button-container a:hover {
+  background-color: #007bff;
+}
+
+.apply-button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+
+.medicines-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  color: black;
+}
+
+.medicine-card {
+  background-color: rgba(255, 255, 255, 0.781);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s;
+  width: 250px;
+  text-align: center;
+}
+
+.medicine-card:hover {
+  transform: scale(1.05);
+}
+
+.medicine-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.medicine-info {
+  padding: 20px;
+}
+
+.profile-menu {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.profile-icon {
+  font-size: 24px;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.profile-icon:hover {
+  background-color: #ddd;
+}
+
+.dropdown {
+  position: absolute;
+  top: 35px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 100px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.dropdown button {
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dropdown button:hover {
+  background-color: #f0f0f0;
+}
+
+.home-footer {
+  width: 100%;
+  text-align: center;
+  margin-top: 30px;
+  padding: 20px;
+  font-size: 14px;
+  color: #fff; /* white text for contrast */
+  border-top: 1px solid #444;
+  background-color: #000; /* black background */
+  position: relative;
+  bottom: 0;
+  left: 0;
+}
+
+
+.home-footer a {
+  color: #00bfff; /* light blue on black */
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.home-footer a:hover {
+  text-decoration: underline;
+}

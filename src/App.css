@@ -1,0 +1,50 @@
+.apply-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.apply-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.apply-form .form-group {
+  margin-bottom: 15px;
+}
+
+.apply-form label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.apply-form input, .apply-form textarea, .apply-form select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.apply-form .error {
+  color: red;
+  font-size: 0.9em;
+}
+
+.apply-form .submit-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.apply-form .submit-button:hover {
+  background-color: #45a049;
+}

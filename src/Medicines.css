@@ -1,0 +1,176 @@
+.apply-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-image: url('/public/med3.jpg'); /* Ensure this path is correct */
+  background-size: cover;
+  background-position: center;
+  padding: 20px;
+  color: #333;
+  font-family: 'Arial', sans-serif;
+}
+
+.apply-container h2 {
+  color: white;
+  font-weight: bold;
+  background-color: #3d3b3b; /* Light blue */
+  padding: 5px 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+
+.medicine-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  background-color: rgba(62, 71, 71, 0.8); /* Slightly transparent white background */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 1200px;
+  width: 100%;
+  margin: 20px auto;
+}
+
+.medicine-item {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 10px;
+  width: calc(17.5% - 20px); /* Adjust as needed */
+  box-shadow: 0 2px 4px rgba(60, 202, 179, 0.986);
+  background-color: #9dc6ec;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.medicine-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.medicine-item h3 {
+  margin-top: 0;
+  font-size: 1.5em;
+  color: #007BFF; /* Blue color for headings */
+}
+
+.medicine-item p {
+  margin: 5px 0;
+  font-size: 1em;
+  color: #555;
+}
+
+.medicine-item p strong {
+  color: #333; /* Darker color for strong text */
+}
+
+.profile-container {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.profile-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-top: 5px;
+  padding: 10px;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
+}
+
+.profile-dropdown button {
+  background: none;
+  border: none;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.dropdown button {
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dropdown button:hover {
+  background-color: #f0f0f0;
+}
+
+.home-footer {
+  text-align: center;
+  margin-top: 30px;
+  padding: 15px;
+  font-size: 14px;
+  color: #333;
+  border-top: 1px solid #ccc;
+  background-color: #f9f9f9;
+}
+
+.home-footer a {
+  color: #007bff;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.home-footer a:hover {
+  text-decoration: underline;
+}
+
+.medicine-item button {
+  padding: 8px 16px;
+  margin-top: 10px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+/* Approve */
+button.approve-btn {
+  background-color: #24c74a;
+  color: white;
+}
+
+button.approve-btn:hover {
+  background-color: #2c74d3;
+}
+
+/* Delete */
+button.delete-btn {
+  background-color: #24c74a;
+  color: white;
+}
+
+button.delete-btn:hover {
+  background-color: #2c74d3;
+}
+
+.search-bar {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}

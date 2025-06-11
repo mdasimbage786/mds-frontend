@@ -1,0 +1,73 @@
+/* Donate.css */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.donate-container {
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    /*background-color: rgb(180, 240, 240);*/
+    background-image: url('/public/m5.jpg'); /* Update this path to your background image */
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+}
+
+.donate-container h2 {
+  color: white;
+  font-weight: bold;
+  background-color: #3d3b3b; /* Light blue */
+  padding: 5px 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.form-container {
+  background-color: rgba(6, 180, 151, 0.986);
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+}
+
+.form-group {
+  margin-bottom: 1rem; /* Use rem unit for consistency */
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px; /* Increased padding for better readability */
+  border: 1px solid #ccc;
+  border-radius: 4px; /* Updated border-radius for a more modern look */
+}
+
+.form-group textarea {
+  height: 100px;
+}
+
+button[type="submit"] {
+  background-color: #007bff; /* Use full color value for better clarity */
+  color: #fff;
+  border: none;
+  padding: 12px 20px; /* Increased padding for better button size */
+  border-radius: 4px; /* Updated border-radius for consistency */
+  cursor: pointer;
+  font-size: 1rem; /* Use rem unit for better font scaling */
+}
+
+button[type="submit"]:hover {
+  background-color: #0062cc; /* Updated hover color for better contrast */
+}
