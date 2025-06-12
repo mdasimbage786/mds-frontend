@@ -41,7 +41,7 @@ const Donate = () => {
       };
 
       // Post to pending donations instead of medicines
-      const response = await axios.post('http://localhost:8080/api/pending-donations', formattedData, {
+      const response = await axios.post('https://mds-backend-zlp1.onrender.com/api/pending-donations', formattedData, {
         headers: {
           'Content-Type': 'application/json',
         },

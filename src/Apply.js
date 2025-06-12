@@ -21,8 +21,8 @@ const Apply = () => {
   const [searchCity, setSearchCity] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/medicines').then(res => setMedicines(res.data));
-    axios.get('http://localhost:8080/api/ngos').then(res => {
+    axios.get('https://mds-backend-zlp1.onrender.com/api/medicines').then(res => setMedicines(res.data));
+    axios.get('https://mds-backend-zlp1.onrender.com/api/ngos').then(res => {
       setNgos(res.data);
       setFilteredNgos(res.data);
     });
@@ -48,16 +48,16 @@ const Apply = () => {
   if (requestedQty > selected.quantity) return toast.error(`Only ${selected.quantity} units available.`);
 
   try {
-    await axios.post('http://localhost:8080/api/applications', form);
+    await axios.post('https://mds-backend-zlp1.onrender.com/api/applications', form);
 
     const updatedQty = selected.quantity - requestedQty;
     if (updatedQty > 0) {
-      await axios.put(`http://localhost:8080/api/medicines/${selected.id}`, {
+      await axios.put(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`, {
         ...selected,
         quantity: updatedQty
       });
     } else {
-      await axios.delete(`http://localhost:8080/api/medicines/${selected.id}`);
+      await axios.delete(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`);
     }
 
     toast.success("Application submitted successfully!");

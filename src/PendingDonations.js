@@ -21,7 +21,7 @@ const PendingDonations = () => {
 
   const fetchPendingDonations = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/pending-donations');
+      const response = await axios.get('https://mds-backend-zlp1.onrender.com/api/pending-donations');
       setPendingDonations(response.data);
       setFilteredDonations(response.data);
       setLoading(false);
@@ -33,7 +33,7 @@ const PendingDonations = () => {
 
   const handleApprove = async (id) => {
     try {
-      await axios.put(`http://localhost:8080/api/pending-donations/${id}/approve`);
+      await axios.put(`https://mds-backend-zlp1.onrender.com/api/pending-donations/${id}/approve`);
       const updated = pendingDonations.filter(d => d.id !== id);
       setPendingDonations(updated);
       setFilteredDonations(updated);

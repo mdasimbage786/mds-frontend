@@ -17,7 +17,7 @@ const Medicines1 = () => {
   useEffect(() => {
     const fetchMedicines = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/medicines');
+        const response = await axios.get('https://mds-backend-zlp1.onrender.com/api/medicines');
         setMedicines(response.data);
         setFilteredMedicines(response.data);
         setLoading(false);

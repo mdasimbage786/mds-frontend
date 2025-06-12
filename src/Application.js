@@ -18,7 +18,7 @@ const Applications = () => {
 
   const fetchApplications = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/applications');
+      const response = await axios.get('https://mds-backend-zlp1.onrender.com/api/applications');
       setApplications(response.data);
       setFilteredApps(response.data);
       setLoading(false);
@@ -30,7 +30,7 @@ const Applications = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/api/applications/${id}`);
+      await axios.delete(`https://mds-backend-zlp1.onrender.com/api/applications/${id}`);
       const updated = applications.filter(app => app.id !== id);
       setApplications(updated);
       setFilteredApps(updated);

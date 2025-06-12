@@ -11,7 +11,7 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/dashboard/stats')
+    fetch('https://mds-backend-zlp1.onrender.com/api/dashboard/stats')
       .then(response => response.json())
       .then(data => setStats(data))
       .catch(error => console.error('Error fetching dashboard stats:', error));

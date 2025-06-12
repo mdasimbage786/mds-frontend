@@ -50,7 +50,7 @@ const Register = () => {
           contactNumber: formData.contactNumber,
           address: formData.address,
         };
-        url = 'http://localhost:8080/api/users/register';
+        url = 'https://mds-backend-zlp1.onrender.com/api/users/register';
       } else {
         payload = {
           ngoId: formData.ngoId,
@@ -60,7 +60,7 @@ const Register = () => {
           contactNumber: formData.contactNumber,
           address: formData.address,
         };
-        url = 'http://localhost:8080/api/ngos/register';
+        url = 'https://mds-backend-zlp1.onrender.com/api/ngos/register';
       }
 
       const response = await axios.post(url, payload);

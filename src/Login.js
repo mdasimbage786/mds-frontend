@@ -24,8 +24,8 @@ const Login = () => {
 
     const endpoint =
       role === 'user'
-        ? 'http://localhost:8080/api/users/login'
-        : 'http://localhost:8080/api/ngos/login';
+        ? 'https://mds-backend-zlp1.onrender.com/api/users/login'
+        : 'https://mds-backend-zlp1.onrender.com/api/ngos/login';
 
     const payload = {
       email: formData.email,
