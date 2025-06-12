@@ -1,11 +1,20 @@
-body, html {
+/* Make full layout height flexible */
+html, body {
   height: 100%;
   margin: 0;
   font-family: Arial, sans-serif;
 }
 
+/* Let root flex to support sticky footer layout */
+body > div#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Main content fills remaining space */
 .home-container {
-  min-height: fit-content;
+  flex: 1;
   padding: 20px;
   background-image: url("/public/med3.jpg");
   background-size: cover;
@@ -30,7 +39,7 @@ body, html {
   max-width: 500px;
   margin: 0 auto;
   padding: 40px;
-  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.7);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-size: 18px;
@@ -66,7 +75,7 @@ body, html {
   border-radius: 4px;
   transition: background-color 0.3s;
   text-align: center;
-  width: 200px; /* Optional: To make buttons the same width */
+  width: 200px;
 }
 
 .button-container a:hover {
@@ -82,7 +91,6 @@ body, html {
   border-radius: 5px;
   text-decoration: none;
 }
-
 
 .medicines-list {
   display: flex;
@@ -160,23 +168,19 @@ body, html {
   background-color: #f0f0f0;
 }
 
+/* Footer - sticky bottom but not fixed */
 .home-footer {
   width: 100%;
   text-align: center;
-  margin-top: 30px;
   padding: 20px;
   font-size: 14px;
-  color: #fff; /* white text for contrast */
+  color: #fff;
   border-top: 1px solid #444;
-  background-color: #000; /* black background */
-  position: relative;
-  bottom: 0;
-  left: 0;
+  background-color: #000;
 }
 
-
 .home-footer a {
-  color: #00bfff; /* light blue on black */
+  color: #00bfff;
   text-decoration: none;
   margin: 0 5px;
 }
