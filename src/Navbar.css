@@ -1,4 +1,5 @@
 .navbar {
+  position: flex;
   top: 1%;
   width: 50%;
   background-color: #0952f050;
