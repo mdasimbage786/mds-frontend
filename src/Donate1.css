@@ -138,3 +138,23 @@ button[type="submit"]:hover {
     padding: 10px;
   }
 }
+
+.donate-footer {
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  color: #030303;
+  border-top: 1px solid #444;
+  background-color: #000;
+}
+
+.donate-footer a {
+  color: #00bfff;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.donate-footer a:hover {
+  text-decoration: underline;
+}

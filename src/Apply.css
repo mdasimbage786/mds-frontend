@@ -1,44 +1,53 @@
 /* Apply.css */
+
 body, html {
   height: 100%;
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(120deg, #24243e, #302b63, #0f0c29);
+  background-size: 300% 300%;
+  animation: bgMove 12s ease infinite;
+}
+
+@keyframes bgMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .apply-container {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-size: cover;
-  background-position: center;
-  padding: 20px;
+  padding: 40px 20px 20px;
 }
 
-.apply-container h2 {
+h2 {
   color: white;
-  font-weight: bold;
-  background-color: #3d3b3b; /* Light blue */
-  padding: 5px 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  margin-bottom: 25px;
+  font-size: 28px;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 10px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .apply-form {
-  background-color: rgba(2, 154, 165, 0.719);
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  border-radius: 16px;
+  padding: 35px 30px;
+  max-width: 500px;
   width: 100%;
-  max-width: 440px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  color: white;
 }
 
 .apply-form label {
   display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-  margin-top: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
 }
 
 .apply-form input,
@@ -46,26 +55,54 @@ body, html {
 .apply-form textarea {
   width: 100%;
   padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-top: 5px;
-}
-
-.apply-form textarea {
-  height: 100px;
-}
-
-.apply-form button[type="submit"] {
-  background-color: #03ad1a;
-  color: #fff;
+  margin-bottom: 20px;
+  border-radius: 8px;
   border: none;
-  padding: 12px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  margin-top: 1rem;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+  font-size: 15px;
+  transition: background 0.3s ease;
 }
 
-.apply-form button[type="submit"]:hover {
-  background-color: #0062cc;
+.apply-form input:focus,
+.apply-form select:focus,
+.apply-form textarea:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.apply-form option {
+  background-color: #222;
+  color: white;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 14px;
+  background-color: #00c896;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #00a37a;
+  transform: scale(1.03);
+}
+
+/* Footer */
+
+/* Responsive */
+@media (max-width: 500px) {
+  .apply-form {
+    padding: 25px 20px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
 }

@@ -4,7 +4,7 @@ import './Login.css';
 import axios from 'axios';
 
 const Register = () => {
-  const [userType, setUserType] = useState('user'); // default is user
+  const [userType, setUserType] = useState('user');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -20,7 +20,6 @@ const Register = () => {
 
   const handleUserTypeChange = (e) => {
     setUserType(e.target.value);
-    // Clear user-specific or NGO-specific fields on switch
     setFormData({
       ...formData,
       firstName: '',
@@ -79,76 +78,70 @@ const Register = () => {
 
   return (
     <div className="auth-container">
-      <h2 color="Dark Blue">Registration</h2>
-
-      {/* User Type Selector */}
-      <div className="form-group">
-        <label>User Type:</label>
-        <select value={userType} onChange={handleUserTypeChange}>
-          <option value="user">User</option>
-          <option value="ngo">NGO</option>
-        </select>
+      <div className="auth-header">
+        <h2>Registration</h2>
+        <div className="role-selector">
+          <label>User Type:</label>
+          <select value={userType} onChange={handleUserTypeChange}>
+            <option value="user">User</option>
+            <option value="ngo">NGO</option>
+          </select>
+        </div>
       </div>
 
       <form className="auth-form" onSubmit={handleSubmit}>
-        {/* Conditionally Render User or NGO Fields */}
         {userType === 'user' ? (
-          <>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="firstName">First Name:</label>
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="lastName">Last Name:</label>
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="firstName">First Name:</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+              />
             </div>
-          </>
+            <div className="form-group">
+              <label htmlFor="lastName">Last Name:</label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
         ) : (
-          <>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="ngoId">NGO ID:</label>
-                <input
-                  type="text"
-                  id="ngoId"
-                  name="ngoId"
-                  value={formData.ngoId}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="name">NGO Name:</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="ngoId">NGO ID:</label>
+              <input
+                type="text"
+                id="ngoId"
+                name="ngoId"
+                value={formData.ngoId}
+                onChange={handleChange}
+                required
+              />
             </div>
-          </>
+            <div className="form-group">
+              <label htmlFor="name">NGO Name:</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
         )}
 
-        {/* Common Fields for both */}
         <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
@@ -205,6 +198,7 @@ const Register = () => {
       <p>
         Already have an account? <Link to="/">Login here</Link>.
       </p>
+
       <footer className="home-footer">
         <p>
           📧 <a href="mailto:asimbage0786@gmail.com">support@gmail.com</a> | 
@@ -214,7 +208,6 @@ const Register = () => {
         </p>
       </footer>
     </div>
-
   );
 };
 

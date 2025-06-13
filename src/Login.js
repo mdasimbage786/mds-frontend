@@ -44,11 +44,7 @@ const Login = () => {
           role === 'user' ? 'userToken' : 'ngoToken',
           data.token || 'mock-token'
         );
-        if (role === 'ngo') {
-        navigate('/PendingDonations');
-      } else {
-        navigate('/Home');
-      }
+        navigate(role === 'ngo' ? '/PendingDonations' : '/Home');
       } else {
         alert('Invalid credentials');
       }
@@ -60,16 +56,16 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      <h2 color="Dark Blue">Login</h2>
-
-      <div className="form-group">
-  <label>Login as:</label>
-  <select value={role} onChange={(e) => setRole(e.target.value)}>
-    <option value="user">User</option>
-    <option value="ngo">NGO</option>
-  </select>
-</div>
-
+      <div className="auth-header">
+        <h2>Login</h2>
+        <div className="role-selector">
+          <label>Login as:</label>
+          <select value={role} onChange={(e) => setRole(e.target.value)}>
+            <option value="user">User</option>
+            <option value="ngo">NGO</option>
+          </select>
+        </div>
+      </div>
 
       <form className="auth-form" onSubmit={handleSubmit}>
         <div className="form-group">

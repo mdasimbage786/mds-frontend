@@ -1,116 +1,196 @@
 body, html {
-    height: 100%;
-    margin: 0;
-    font-family: Arial, sans-serif;
+  height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-image: url(/public/med3.jpg);
+  background-size: 200% 100%;
+  animation: gradientMotion 15s ease infinite;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+@keyframes gradientMotion {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.auth-container {
+  background: rgba(9, 69, 233, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  padding: 40px 25px;
+  max-width: 420px;
+  width: 90%;
+  margin: 60px auto;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  .auth-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    /*background-color: rgb(180, 240, 240);*/
-    background-image: url('/public/med3.jpg'); /* Update this path to your background image */
-    background-size: cover;
-    background-position: center;
-    padding: 20px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .auth-form {
-    background-color: rgba(14, 189, 160, 0.986);
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
-  }
-  
-  .auth-container h2 {
+}
+
+.auth-container h2 {
   font-size: 32px;
-  color: #fff;
-  font-weight: bold;
-  background-color: #3d3b3b;
-  padding: 10px 20px;
-  border-radius: 10px;
+  font-weight: 700;
+  color: #ffffff;
   margin-bottom: 20px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
-/* Updated select style */
-.auth-form select {
+.role-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.role-selector label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.role-selector select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 15px;
   width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  font-size: 16px;
-  margin-top: 5px;
-  cursor: pointer;
-  transition: border 0.3s ease;
+  max-width: 200px;
+  transition: background 0.3s ease;
 }
 
-.auth-form select:focus {
-  border: 1px solid #007bff;
+.role-selector select:focus {
   outline: none;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 2px #00bcd4;
 }
 
-  
-  .form-group {
-    margin-bottom: 20px;
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: block;
+  color: #ffffff;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.auth-container select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.auth-container select:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 2px #00bcd4;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  background: #00acc1;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.submit-button:hover {
+  background: #008ba3;
+  transform: scale(1.03);
+}
+
+.auth-container p {
+  margin-top: 20px;
+  color: #ffffff;
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+/* Full-width sticky or bottom footer */
+.home-footer {
+  width: 95%;
+  background-color: rgba(255, 255, 255, 0.2);
+  text-align: center;
+  font-size: 13px;
+  color: #ffffff;
+  padding: 16px 12px;
+  margin-top: 40px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.home-footer a {
+  color: #ffffff;
+  text-decoration: none;
+  margin: 0 2px;
+}
+
+.home-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive layout */
+@media (max-width: 480px) {
+  .auth-container {
+    padding: 25px 20px;
+    max-width: 95%;
   }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+
+  .auth-container h2 {
+    font-size: 26px;
   }
-  
-  .form-group input[type="text"],
-  .form-group input[type="email"],
-  .form-group input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
+
   .submit-button {
-    display: block;
-    width: 100%;
+    font-size: 15px;
     padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
   }
-  
-  .submit-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .auth-container p {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  /* Add this at the bottom of Auth.css */
-select {
-  width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  font-size: 16px;
-  margin-top: 5px;
-  cursor: pointer;
-  transition: border 0.3s ease;
-}
 
-select:focus {
-  border: 1px solid #007bff;
-  outline: none;
+  .role-selector select {
+    font-size: 14px;
+  }
+
+  .form-group input,
+  .auth-container select {
+    font-size: 15px;
+    padding: 10px;
+  }
+
+  .home-footer {
+    font-size: 12px;
+    line-height: 1.6;
+    padding: 14px 10px;
+  }
 }

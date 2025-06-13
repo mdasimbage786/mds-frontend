@@ -3,7 +3,7 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './Donate.css';
+import './Donate1.css';
 
 const Donate = () => {
   const [formData, setFormData] = useState({
@@ -69,7 +69,7 @@ const Donate = () => {
   return (
     <div className="donate-container">
       <Navbar />
-      <h2 color="Dark Blue">Donate Medicine</h2>
+      <h2>Donate Medicine</h2>
       <div className="form-container">
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -143,8 +143,8 @@ const Donate = () => {
 
       <footer className="home-footer">
         <p>
-          📧 <a href="mailto:asimbage0786@gmail.com">support@gmail.com</a> | 
-          📞 <a href="tel:+919686117020">+91 9686117020</a> | 
+          📧 <a href="mailto:asimbage0786@gmail.com" color='black'>support@gmail.com</a> | 
+          📞 <a href="tel:+919686117020" color='black'>+91 9686117020</a> | 
           🔗 <a href="https://www.linkedin.com/in/mohammedasim-bage-4290b22a9" target="_blank" rel="noopener noreferrer">LinkedIn</a> | 
           📸 <a href="https://www.instagram.com/mdasimb_18" target="_blank" rel="noopener noreferrer">Instagram</a>
         </p>

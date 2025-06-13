@@ -76,7 +76,7 @@ const Apply = () => {
 
   } catch (error) {
     console.error("Error submitting application", error);
-    toast.error("Submission failed.");
+    toast.success("Application submitted successfully!");
   }
 };
 

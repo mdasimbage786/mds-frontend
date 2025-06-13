@@ -1,7 +1,10 @@
 .navbar {
-    background-color: #383434;
-    overflow: hidden;
-  }
+  top: 1%;
+  width: 50%;
+  background-color: #0952f050;
+  z-index: 1000; /* stays above other elements */
+}
+
   
   .navbar ul {
     list-style-type: none;
