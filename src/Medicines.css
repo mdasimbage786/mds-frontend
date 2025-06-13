@@ -51,9 +51,9 @@ body, html {
 .medicine-item {
   width: calc(20% - 20px);
   padding: 20px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(68, 0, 255, 0.233);
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 255, 191, 0.24);
+  box-shadow: 0 4px 12px rgba(251, 255, 0, 0.301);
   color: rgb(0, 0, 0);
   transition: all 0.3s ease;
 }
