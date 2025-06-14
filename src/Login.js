@@ -5,52 +5,38 @@ import axios from 'axios';
 
 const Login = () => {
   const [role, setRole] = useState('user');
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const handleChange = e => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
-
     const endpoint =
       role === 'user'
         ? 'https://mds-backend-zlp1.onrender.com/api/users/login'
         : 'https://mds-backend-zlp1.onrender.com/api/ngos/login';
 
-    const payload = {
-      email: formData.email,
-      password: formData.password
-    };
-
     try {
-      const response = await axios.post(endpoint, payload, {
-        headers: { 'Content-Type': 'application/json' },
+      const res = await axios.post(endpoint, formData, {
+        headers: { 'Content-Type': 'application/json' }
       });
 
-      const data = response.data;
+      const token = res.data?.token || 'mock-token'; // fallback
+      if (token) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('role', role);
 
-      if (data) {
-        localStorage.setItem(
-          role === 'user' ? 'userToken' : 'ngoToken',
-          data.token || 'mock-token'
-        );
-        navigate(role === 'ngo' ? '/PendingDonations' : '/Home');
+        navigate(role === 'ngo' ? '/pendingdonations' : '/');
       } else {
-        alert('Invalid credentials');
+        alert('Invalid login credentials.');
       }
-    } catch (error) {
-      console.error('Login error:', error);
-      alert('Login failed. Check credentials.');
+    } catch (err) {
+      console.error(err);
+      alert('Login failed. Check your credentials.');
     }
   };
 
@@ -60,7 +46,7 @@ const Login = () => {
         <h2>Login</h2>
         <div className="role-selector">
           <label>Login as:</label>
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
+          <select value={role} onChange={e => setRole(e.target.value)}>
             <option value="user">User</option>
             <option value="ngo">NGO</option>
           </select>
@@ -93,9 +79,7 @@ const Login = () => {
         <button type="submit" className="submit-button">Login</button>
       </form>
 
-      <p>
-        Don't have an account? <Link to="/register">Register here</Link>.
-      </p>
+      <p>Don't have an account? <Link to="/register">Register here</Link>.</p>
 
       <footer className="home-footer">
         <p>

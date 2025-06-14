@@ -28,7 +28,7 @@ body > div#root {
   color: rgb(0, 0, 0);
 }
 
-.home-header h1 {
+.home-left h1 {
   margin-bottom: 40px;
   font-size: 2.5rem;
   color: #000000;
@@ -98,6 +98,63 @@ body > div#root {
   justify-content: center;
   gap: 20px;
   color: black;
+}
+
+.home-left {
+  max-width: 70%;
+}
+
+.home-left h1 {
+  font-size: 3rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+  line-height: 1.3;
+}
+
+.home-left p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 35px;
+  color: #333;
+}
+
+.highlight {
+  color: #0004ff;
+  font-weight: bold;
+}
+
+
+/* Buttons */
+.button-row {
+  display: flex;
+  gap: 15px;
+}
+
+.donate-button,
+.apply-button {
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 6px;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.donate-button {
+  background-color: #28a745;
+}
+
+.donate-button:hover {
+  background-color: #218838;
+}
+
+.apply-button {
+  background-color: #007bff;
+}
+
+.apply-button:hover {
+  background-color: #0056b3;
 }
 
 .medicine-card {
@@ -174,9 +231,9 @@ body > div#root {
   text-align: center;
   padding: 20px;
   font-size: 14px;
-  color: #030303;
+  color: #000000;
   border-top: 1px solid #444;
-  background-color: #000;
+  background-color: #000000;
 }
 
 .home-footer a {

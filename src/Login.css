@@ -16,7 +16,7 @@ body, html {
 }
 
 .auth-container {
-  background: rgba(9, 69, 233, 0.25);
+  background: rgba(9, 69, 233, 0.342);
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   border-radius: 16px;
@@ -117,7 +117,7 @@ body, html {
 .submit-button {
   width: 100%;
   padding: 12px;
-  background: #00acc1;
+  background: #2a0ae4;
   color: #ffffff;
   border: none;
   border-radius: 8px;

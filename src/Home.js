@@ -1,56 +1,29 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+
+import react from 'react-router-dom';
 import Navbar from './Navbar';
 import './Home.css';
 
 const Home = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const navigate = useNavigate();
-
-
-  const handleLogout = () => {
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('ngoToken');
-    navigate('/');
-  };
 
   return (
     <div className="home-container">
       <Navbar />
+      <div className="home-left">
+        <h1>
+          Donate Better. Receive Safer. <br />
+          Together We Care.
+        </h1>
+        <p className="description-text">
+  The <span className="highlight">Medicine Donation System</span> is a community-driven initiative to <span className="highlight">collect and redistribute unused medicines</span>. Through this platform, individuals can contribute their <span className="highlight">surplus medicines</span> to <span className="highlight">NGOs and needy individuals</span>. Join our mission to <span className="highlight">improve healthcare accessibility</span> and <span className="highlight">reduce medical waste</span>.
+  <br /><br />
+  Our platform ensures <span className="highlight">secure and transparent handling of donations</span>. We work closely with <span className="highlight">verified NGOs</span> to distribute medicines where they are most needed. Make a difference today by <span className="highlight">donating</span> or <span className="highlight">applying for required medicines</span>.
+</p>
 
-      {/* 👤 Profile Icon with Dropdown */}
-      <div className="profile-menu">
-        <div
-          className="profile-icon"
-          onClick={() => setDropdownOpen(!dropdownOpen)}
-          title="Profile"
-        >
-          👤
+        <div className="button-row">
+          <a href="/donate" className="donate-button">Donate Medicines</a>
+          <a href="/apply" className="apply-button">Request Medicines</a>
         </div>
-        {dropdownOpen && (
-          <div className="dropdown">
-            <button onClick={handleLogout}>Logout</button>
-          </div>
-        )}
       </div>
-
-      <header className="home-header">
-        <h1>Welcome To Medicine Donation System</h1>
-        <br />
-        <div className="home-description">
-          <div className="image-container">
-            <img src="med1.jpeg" alt="Description" className="description-image" />
-            <div className="button-container">
-              <Link to="/donate" className="donate-button">Donate</Link>
-              <Link to="/apply" className="apply-button">Apply</Link>
-            </div>
-          </div>
-          <p>
-            Donate unused or surplus medicines to help those in need access essential healthcare.
-            Your contributions can make a significant difference in improving their quality of life.
-          </p>
-        </div>
-      </header>
 
       {/* 📞 Help Section */}
       <footer className="home-footer">

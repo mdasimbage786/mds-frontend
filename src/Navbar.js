@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ProfileIcon from './ProfileIcon';
 import './Navbar.css'; // Import CSS for styling the navbar
 
 const Navbar = () => {
@@ -11,6 +12,7 @@ const Navbar = () => {
         <li><Link to="/donate">Donate</Link></li>
         <li><Link to="/apply">Apply</Link></li>
       </ul>
+      <ProfileIcon />
     </nav>
   );
 };

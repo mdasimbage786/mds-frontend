@@ -2,139 +2,72 @@
 body, html {
   height: 100%;
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-image: url('/public/m5.jpg');
-  background-size: 200% 100%;
-  background-position: center;
-  animation: gradientMotion 15s ease infinite;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-@keyframes gradientMotion {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  font-family: Arial, sans-serif;
 }
 
 .donate-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
-  min-height: 100vh;
-  backdrop-filter: blur(6px);
-}
-
-.form-container {
-  background: rgba(6, 180, 151, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  border-radius: 16px;
-  padding: 40px;
-  width: 100%;
-  max-width: 500px;
-  color: #ffffff;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  animation: fadeInUp 1s ease-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    /*background-color: rgb(180, 240, 240);*/
+    background-image: url('/public/m5.jpg'); /* Update this path to your background image */
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
 }
 
 .donate-container h2 {
-  font-size: 32px;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 25px;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-  background-color: rgba(0, 0, 0, 0.25);
-  padding: 10px 20px;
-  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  background-color: #3d3b3b; /* Light blue */
+  padding: 5px 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.form-container {
+  background-color: rgba(0, 198, 212, 0.986);
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 1rem; /* Use rem unit for consistency */
 }
 
 .form-group label {
-  font-weight: 500;
-  margin-bottom: 8px;
   display: block;
-  color: #ffffff;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 12px 14px;
-  border-radius: 8px;
-  border: none;
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  background: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 0 2px #00bcd4;
+  padding: 12px; /* Increased padding for better readability */
+  border: 1px solid #ccc;
+  border-radius: 4px; /* Updated border-radius for a more modern look */
 }
 
 .form-group textarea {
-  resize: vertical;
-  min-height: 100px;
+  height: 100px;
 }
 
 button[type="submit"] {
-  width: 100%;
-  padding: 12px;
-  background: #00acc1;
-  color: #ffffff;
+  background-color: #007bff; /* Use full color value for better clarity */
+  color: #fff;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
+  padding: 12px 20px; /* Increased padding for better button size */
+  border-radius: 4px; /* Updated border-radius for consistency */
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  font-size: 1rem; /* Use rem unit for better font scaling */
 }
 
 button[type="submit"]:hover {
-  background: #008ba3;
-  transform: scale(1.03);
-}
-
-/* Responsive styles */
-@media (max-width: 480px) {
-  .form-container {
-    padding: 25px;
-    max-width: 100%;
-  }
-
-  .donate-container h2 {
-    font-size: 26px;
-  }
-
-  button[type="submit"] {
-    font-size: 15px;
-    padding: 10px;
-  }
-
-  .form-group input,
-  .form-group textarea {
-    font-size: 15px;
-    padding: 10px;
-  }
+  background-color: #0062cc; /* Updated hover color for better contrast */
 }
