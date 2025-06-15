@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ProfileIcon from './ProfileIcon';
 import './Navbar.css';
 
 const Navbar2 = () => {
@@ -11,6 +12,7 @@ const Navbar2 = () => {
         <li><Link to="/application">Applications</Link></li>
         <li><Link to="/dashboard">Dashboard</Link></li>
       </ul>
+      <ProfileIcon/>
     </nav>
   );
 };

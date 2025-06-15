@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
+import { motion } from 'framer-motion';
 import axios from 'axios';
 
 const Login = () => {
@@ -30,7 +31,7 @@ const Login = () => {
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('role', role);
 
-        navigate(role === 'ngo' ? '/pendingdonations' : '/');
+        navigate(role === 'ngo' ? '/medicines1' : '/Home');
       } else {
         alert('Invalid login credentials.');
       }
