@@ -17,9 +17,9 @@ const ProfileIcon = () => {
     if (isLoggedIn) {
       localStorage.clear();
       setIsLoggedIn(false);
-      navigate('/Login');
+      navigate('/');
     } else {
-      navigate('/Login');
+      navigate('/');
     }
     setShowMenu(false);
   };

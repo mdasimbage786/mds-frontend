@@ -15,7 +15,7 @@ body, html {
     background-image: url('/public/m5.jpg'); /* Update this path to your background image */
     background-size: cover;
     background-position: center;
-    padding: 20px;
+    padding: 100px;
 }
 
 .donate-container h2 {
