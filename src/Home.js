@@ -14,7 +14,7 @@ const Home = () => {
           Together We Care.
         </h1>
         <p className="description-text">
-  The <span className="highlight">Medicine Donation System</span> is a community-driven initiative to <span className="highlight">collect and redistribute unused medicines</span>. Through this platform, individuals can contribute their <span className="highlight">surplus medicines</span> to <span className="highlight">NGOs and needy individuals</span>. Join our mission to <span className="highlight">improve healthcare accessibility</span> and <span className="highlight">reduce medical waste</span>.
+  The <span className="highlight">Medicine Donation System</span> is a community-driven initiative to <span className="highlight">collect and redistribute unused medicines</span>.<br/> Through this platform, individuals can contribute their <span className="highlight">surplus medicines</span> to <span className="highlight">NGOs and needy individuals</span>. Join our <br/> mission to <span className="highlight">improve healthcare accessibility</span> and <span className="highlight">reduce medical waste</span>.
   <br /><br />
   Our platform ensures <span className="highlight">secure and transparent handling of donations</span>. We work closely with <span className="highlight">verified NGOs</span> to distribute medicines where they are most needed. Make a difference today by <span className="highlight">donating</span> or <span className="highlight">applying for required medicines</span>.
 </p>
