@@ -1,4 +1,4 @@
-/* Professional Donate Component Styles */
+/* Professional Apply Component Styles */
 
 * {
   box-sizing: border-box;
@@ -13,7 +13,7 @@ body, html {
   line-height: 1.6;
 }
 
-.donate-container {
+.apply-container {
   min-height: 100vh;
   padding: 120px 20px 20px;
   display: flex;
@@ -60,7 +60,7 @@ body, html {
   overflow: hidden;
 }
 
-.donate-form {
+.apply-form {
   padding: 40px;
 }
 
@@ -252,45 +252,6 @@ body, html {
   font-weight: bold;
 }
 
-/* Donation Process */
-.donation-process {
-  margin-bottom: 25px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.donation-process h4 {
-  color: #1f2937;
-  font-size: 1rem;
-  margin-bottom: 15px;
-}
-
-.process-step {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.step-number {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-right: 12px;
-  flex-shrink: 0;
-}
-
-.step-text {
-  color: #4b5563;
-  font-size: 0.9rem;
-}
-
 .contact-info {
   padding-top: 20px;
   border-top: 1px solid #e5e7eb;
@@ -391,7 +352,7 @@ body, html {
     font-size: 2rem;
   }
   
-  .donate-form {
+  .apply-form {
     padding: 25px;
   }
   
@@ -407,7 +368,7 @@ body, html {
 }
 
 @media (max-width: 480px) {
-  .donate-container {
+  .apply-container {
     padding: 100px 15px 15px;
   }
   
@@ -419,7 +380,7 @@ body, html {
     font-size: 1rem;
   }
   
-  .donate-form {
+  .apply-form {
     padding: 20px;
   }
   
