@@ -4,7 +4,6 @@ import Navbar2 from './Navbar2';
 import './Medicines.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom';
 
 const Medicines1 = () => {
   const [medicines, setMedicines] = useState([]);
@@ -15,7 +14,6 @@ const Medicines1 = () => {
   const [filterBy, setFilterBy] = useState('all');
   const [sortBy, setSortBy] = useState('name');
 
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMedicines = async () => {
@@ -80,10 +78,6 @@ const Medicines1 = () => {
     if (diffDays < 30) return { class: 'expiry-critical', text: 'Expires Soon' };
     if (diffDays < 90) return { class: 'expiry-warning', text: 'Expiring' };
     return { class: 'expiry-safe', text: 'Good' };
-  };
-
-  const handleRequestMedicine = (medicineName) => {
-    navigate('/apply', { state: { selectedMedicine: medicineName } });
   };
 
   return (
@@ -212,19 +206,6 @@ const Medicines1 = () => {
                               <span className="label">Description:</span>
                               <p>{medicine.description}</p>
                             </div>
-                          </div>
-                          
-                          <div className="card-actions">
-                            <button 
-                              className="request-btn"
-                              onClick={() => handleRequestMedicine(medicine.name)}
-                              disabled={medicine.quantity === 0}
-                            >
-                              {medicine.quantity === 0 ? 'Out of Stock' : 'Request Medicine'}
-                            </button>
-                            <button className="details-btn">
-                              View Details
-                            </button>
                           </div>
                         </div>
                       );

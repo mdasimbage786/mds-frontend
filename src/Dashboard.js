@@ -156,19 +156,19 @@ const Dashboard = () => {
               <div className="quick-actions-card">
                 <h3>Quick Actions</h3>
                 <div className="action-buttons">
-                  <button className="action-btn primary" onClick={() => window.location.href = '/pending-donations'}>
+                  <button className="action-btn primary" onClick={() => window.location.href = '/PendingDonations'}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <circle cx="12" cy="12" r="10"/>
                       <polyline points="12,6 12,12 16,14"/>
                     </svg>
-                    Review Pending
+                    Review Pending Application
                   </button>
-                  <button className="action-btn secondary" onClick={() => window.location.href = '/donate'}>
+                  <button className="action-btn secondary" onClick={() => window.location.href = '/application'}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <line x1="12" y1="5" x2="12" y2="19"/>
                       <line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
-                    Add Medicine
+                    Review Pending Application
                   </button>
                   <button className="action-btn tertiary" onClick={handleRefresh}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
