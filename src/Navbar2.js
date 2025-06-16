@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ProfileIcon from './ProfileIcon';
-import './Navbar.css'; // Using the same CSS file
+import './Navbar.css';
 
 const Navbar2 = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -21,11 +21,21 @@ const Navbar2 = () => {
   // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
+    // Remove body scroll lock when route changes
+    document.body.classList.remove('mobile-menu-open');
   }, [location]);
 
   // Toggle mobile menu
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    const newState = !isMobileMenuOpen;
+    setIsMobileMenuOpen(newState);
+    
+    // Prevent body scroll when mobile menu is open
+    if (newState) {
+      document.body.classList.add('mobile-menu-open');
+    } else {
+      document.body.classList.remove('mobile-menu-open');
+    }
   };
 
   // Check if link is active
@@ -33,11 +43,30 @@ const Navbar2 = () => {
     return location.pathname === path;
   };
 
+  // Handle mobile menu link click
+  const handleMobileLinkClick = () => {
+    setIsMobileMenuOpen(false);
+    document.body.classList.remove('mobile-menu-open');
+  };
+
+  // Handle click outside mobile menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMobileMenuOpen && !event.target.closest('.navbar')) {
+        setIsMobileMenuOpen(false);
+        document.body.classList.remove('mobile-menu-open');
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isMobileMenuOpen]);
+
   return (
     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container">
-        {/* Brand/Logo - Admin Panel */}
-        <Link to="/dashboard" className="navbar-brand">
+        {/* Brand/Logo */}
+        <Link to="/medicines1" className="navbar-brand">
           <div className="brand-icon">A</div>
           <span>Admin Panel</span>
         </Link>
@@ -81,22 +110,16 @@ const Navbar2 = () => {
         {/* Profile and Mobile Toggle */}
         <div className="navbar-profile">
           <ProfileIcon />
-          <div 
+          <button 
             className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`}
             onClick={toggleMobileMenu}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                toggleMobileMenu();
-              }
-            }}
             aria-label="Toggle mobile menu"
+            aria-expanded={isMobileMenuOpen}
           >
             <span></span>
             <span></span>
             <span></span>
-          </div>
+          </button>
         </div>
       </div>
 
@@ -107,6 +130,7 @@ const Navbar2 = () => {
             <Link 
               to="/medicines1" 
               className={isActiveLink('/medicines1') ? 'active' : ''}
+              onClick={handleMobileLinkClick}
             >
               Medicines
             </Link>
@@ -115,6 +139,7 @@ const Navbar2 = () => {
             <Link 
               to="/PendingDonations" 
               className={isActiveLink('/PendingDonations') ? 'active' : ''}
+              onClick={handleMobileLinkClick}
             >
               Donations
             </Link>
@@ -123,6 +148,7 @@ const Navbar2 = () => {
             <Link 
               to="/application" 
               className={isActiveLink('/application') ? 'active' : ''}
+              onClick={handleMobileLinkClick}
             >
               Applications
             </Link>
@@ -131,6 +157,7 @@ const Navbar2 = () => {
             <Link 
               to="/dashboard" 
               className={isActiveLink('/dashboard') ? 'active' : ''}
+              onClick={handleMobileLinkClick}
             >
               Dashboard
             </Link>

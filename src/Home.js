@@ -90,33 +90,25 @@ const Home = () => {
       </section>
 
       {/* Footer */}
-      <footer className="home-footer">
+      <footer className="professional-footer">
         <div className="footer-content">
-          <div className="footer-links">
-            <a href="mailto:asimbage0786@gmail.com">
-              📧 support@gmail.com
-            </a>
-            <a href="tel:+919686117020">
-              📞 +91 9686117020
-            </a>
-            <a 
-              href="https://www.linkedin.com/in/mohammedasim-bage-4290b22a9" 
-              target="_blank" 
-              rel="noopener noreferrer"
-            >
-              🔗 LinkedIn
-            </a>
-            <a 
-              href="https://www.instagram.com/mdasimb_18" 
-              target="_blank" 
-              rel="noopener noreferrer"
-            >
-              📸 Instagram
-            </a>
+          <div className="footer-section">
+            <h4>Contact Us</h4>
+            <p>📧 <a href="mailto:asimbage0786@gmail.com">support@gmail.com</a></p>
+            <p>📞 <a href="tel:+919686117020">+91 9686117020</a></p>
           </div>
-          <div className="footer-text">
-            <p>&copy; 2024 Medicine Donation System. Making healthcare accessible for everyone.</p>
+          <div className="footer-section">
+            <h4>Follow Us</h4>
+            <p>🔗 <a href="https://www.linkedin.com/in/mohammedasim-bage-4290b22a9" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
+            <p>📸 <a href="https://www.instagram.com/mdasimb_18" target="_blank" rel="noopener noreferrer">Instagram</a></p>
           </div>
+          <div className="footer-section">
+            <h4>Medicine Distribution System</h4>
+            <p>Connecting people with essential medicines through trusted NGO partners</p>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>&copy; 2024 Medicine Distribution System. All rights reserved.</p>
         </div>
       </footer>
     </div>

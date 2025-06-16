@@ -222,9 +222,6 @@ const Medicines = () => {
                             >
                               {medicine.quantity === 0 ? 'Out of Stock' : 'Request Medicine'}
                             </button>
-                            <button className="details-btn">
-                              View Details
-                            </button>
                           </div>
                         </div>
                       );
@@ -260,7 +257,6 @@ const Medicines = () => {
           </div>
 
           <div className="stats-section">
-            <h4>Quick Stats</h4>
             <div className="stat-item">
               <span className="stat-number">{medicines.length}</span>
               <span className="stat-label">Total Medicines</span>

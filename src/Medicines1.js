@@ -241,7 +241,6 @@ const Medicines1 = () => {
           </div>
 
           <div className="stats-section">
-            <h4>Quick Stats</h4>
             <div className="stat-item">
               <span className="stat-number">{medicines.length}</span>
               <span className="stat-label">Total Medicines</span>

@@ -21,17 +21,46 @@ const Navbar = () => {
   // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
+    // Remove body scroll lock when route changes
+    document.body.classList.remove('mobile-menu-open');
   }, [location]);
 
   // Toggle mobile menu
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    const newState = !isMobileMenuOpen;
+    setIsMobileMenuOpen(newState);
+    
+    // Prevent body scroll when mobile menu is open
+    if (newState) {
+      document.body.classList.add('mobile-menu-open');
+    } else {
+      document.body.classList.remove('mobile-menu-open');
+    }
   };
 
   // Check if link is active
   const isActiveLink = (path) => {
     return location.pathname === path;
   };
+
+  // Handle mobile menu link click
+  const handleMobileLinkClick = () => {
+    setIsMobileMenuOpen(false);
+    document.body.classList.remove('mobile-menu-open');
+  };
+
+  // Handle click outside mobile menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMobileMenuOpen && !event.target.closest('.navbar')) {
+        setIsMobileMenuOpen(false);
+        document.body.classList.remove('mobile-menu-open');
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isMobileMenuOpen]);
 
   return (
     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
@@ -81,22 +110,16 @@ const Navbar = () => {
         {/* Profile and Mobile Toggle */}
         <div className="navbar-profile">
           <ProfileIcon />
-          <div 
+          <button 
             className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`}
             onClick={toggleMobileMenu}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                toggleMobileMenu();
-              }
-            }}
             aria-label="Toggle mobile menu"
+            aria-expanded={isMobileMenuOpen}
           >
             <span></span>
             <span></span>
             <span></span>
-          </div>
+          </button>
         </div>
       </div>
 
@@ -107,6 +130,7 @@ const Navbar = () => {
             <Link 
               to="/Home" 
               className={isActiveLink('/Home') ? 'active' : ''}
+              onClick={handleMobileLinkClick}
             >
               Home
             </Link>
@@ -115,6 +139,7 @@ const Navbar = () => {
             <Link 
               to="/medicines" 
               className={isActiveLink('/medicines') ? 'active' : ''}
+              onClick={handleMobileLinkClick}
             >
               Medicines
             </Link>
@@ -123,6 +148,7 @@ const Navbar = () => {
             <Link 
               to="/donate" 
               className={isActiveLink('/donate') ? 'active' : ''}
+              onClick={handleMobileLinkClick}
             >
               Donate
             </Link>
@@ -131,6 +157,7 @@ const Navbar = () => {
             <Link 
               to="/apply" 
               className={isActiveLink('/apply') ? 'active' : ''}
+              onClick={handleMobileLinkClick}
             >
               Apply
             </Link>

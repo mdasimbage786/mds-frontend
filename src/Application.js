@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar2 from './Navbar2';
 import './Applications.css';
-import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -13,8 +12,6 @@ const Applications = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [processingId, setProcessingId] = useState(null);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchApplications();
@@ -54,12 +51,6 @@ const Applications = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('ngoToken');
-    navigate('/');
-  };
-
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     setSearchTerm(value);
@@ -97,21 +88,6 @@ const Applications = () => {
     <div className="applications-container">
       <Navbar2 />
       
-      {/* Profile Menu */}
-      <div className="profile-menu">
-        <div
-          className="profile-icon"
-          onClick={() => setShowDropdown(!showDropdown)}
-          title="Profile"
-        >
-          👤
-        </div>
-        {showDropdown && (
-          <div className="dropdown">
-            <button onClick={handleLogout} className="logout-btn">Logout</button>
-          </div>
-        )}
-      </div>
 
       {/* Page Header */}
       <div className="page-header">
