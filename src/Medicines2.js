@@ -83,8 +83,12 @@ const Medicines2 = () => {
   };
 
   const handleRequestMedicine = (medicineName) => {
-    navigate('/apply', { state: { selectedMedicine: medicineName } });
-  };
+  toast.info("Please login to request this medicine.");
+  setTimeout(() => {
+    navigate('/login');
+  }, 1500); // delay for user to see the toast
+};
+
 
   return (
     <div className="medicines-container">
@@ -252,8 +256,8 @@ const Medicines2 = () => {
           
           <div className="contact-info">
             <h4>Need Help?</h4>
-            <p>📞 +91 9686117020</p>
-            <p>📧 support@gmail.com</p>
+            <p>📞 <a href="tel:+919686117020">+91 9686117020</a></p>
+            <p>📧 <a href="mailto:asimbage0786@gmail.com">support@gmail.com</a></p>
           </div>
 
           <div className="stats-section">

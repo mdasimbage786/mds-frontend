@@ -197,15 +197,15 @@ const AboutUs = () => {
             <div className="contact-details">
               <div className="contact-item">
                 <strong>Email:</strong>
-                <span>asimbage0786@gmail.com</span>
+                <span>📧 <a href="mailto:asimbage0786@gmail.com">support@gmail.com</a></span>
               </div>
               <div className="contact-item">
                 <strong>Phone:</strong>
-                <span>+91 9686117020</span>
+                <span>📞 <a href="tel:+919686117020">+91 9686117020</a></span>
               </div>
               <div className="contact-item">
                 <strong>Address:</strong>
-                <span>P B Dargah Chinchali Road, Kudachi 591311</span>
+                <span>🏠 P B Dargah Chinchali Road, Kudachi 591311</span>
               </div>
             </div>
           </div>

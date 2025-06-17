@@ -252,8 +252,8 @@ const Medicines = () => {
           
           <div className="contact-info">
             <h4>Need Help?</h4>
-            <p>📞 +91 9686117020</p>
-            <p>📧 support@gmail.com</p>
+            <p>📞 <a href="tel:+919686117020">+91 9686117020</a></p>
+            <p>📧 <a href="mailto:asimbage0786@gmail.com">support@gmail.com</a></p>
           </div>
 
           <div className="stats-section">
