@@ -1,0 +1,128 @@
+/* Brand Switcher Styles */
+.brand-switcher {
+  position: relative;
+}
+
+.brand-switcher .navbar-brand {
+  cursor: pointer;
+  position: relative;
+  padding-right: 8px;
+  transition: all 0.3s ease;
+}
+
+.brand-switcher .navbar-brand:hover {
+  transform: translateY(-1px);
+}
+
+.dropdown-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+  color: #6b7280;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+.brand-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  margin-top: 8px;
+  z-index: 1001;
+  animation: dropdownSlideIn 0.3s ease;
+}
+
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-header {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+  padding: 8px 12px 4px;
+  border-bottom: 1px solid rgba(107, 114, 128, 0.1);
+  margin-bottom: 4px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #374151;
+  font-weight: 500;
+}
+
+.dropdown-item:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  transform: translateX(4px);
+}
+
+.dropdown-brand-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .brand-dropdown {
+    min-width: 180px;
+    right: 0;
+    left: auto;
+  }
+  
+  .dropdown-item {
+    padding: 12px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .brand-dropdown {
+    background: rgba(31, 41, 55, 0.98);
+    border-color: rgba(75, 85, 99, 0.3);
+  }
+  
+  .dropdown-header {
+    color: #9ca3af;
+  }
+  
+  .dropdown-item {
+    color: #f3f4f6;
+  }
+  
+  .dropdown-item:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+  }
+}

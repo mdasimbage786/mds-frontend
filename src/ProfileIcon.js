@@ -116,9 +116,9 @@ const ProfileIcon = () => {
       setIsLoggedIn(false);
       setUserDetails({});
       setUserRole('');
-      navigate('/');
+      navigate('/Login');
     } else {
-      navigate('/');
+      navigate('/Login');
     }
     setShowMenu(false);
   };

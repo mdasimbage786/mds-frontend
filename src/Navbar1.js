@@ -4,8 +4,8 @@ import ProfileIcon from './ProfileIcon';
 import BrandSwitcher from './BrandSwitcher';
 import './Navbar.css';
 
-// Admin Panel Navbar
-const Navbar2 = () => {
+// Guest Panel Navbar
+const Navbar1 = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
@@ -62,46 +62,46 @@ const Navbar2 = () => {
     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container">
         {/* Brand Switcher */}
-        <BrandSwitcher currentBrand="admin" />
+        <BrandSwitcher currentBrand="guest" />
 
         {/* Desktop Navigation */}
         <ul className="desktop-menu">
           <li>
             <Link 
-              to="/medicines1" 
-              className={isActiveLink('/medicines1') ? 'active' : ''}
+              to="/Home1" 
+              className={isActiveLink('/Home1') ? 'active' : ''}
+            >
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link 
+              to="/medicines2" 
+              className={isActiveLink('/medicines2') ? 'active' : ''}
             >
               Medicines
             </Link>
           </li>
           <li>
             <Link 
-              to="/PendingDonations" 
-              className={isActiveLink('/PendingDonations') ? 'active' : ''}
+              to="/PendingDonations1" 
+              className={isActiveLink('/PendingDonations1') ? 'active' : ''}
             >
               Donations
             </Link>
           </li>
           <li>
             <Link 
-              to="/application" 
-              className={isActiveLink('/application') ? 'active' : ''}
+              to="/application1" 
+              className={isActiveLink('/application1') ? 'active' : ''}
             >
               Applications
             </Link>
           </li>
           <li>
             <Link 
-              to="/dashboard" 
-              className={isActiveLink('/dashboard') ? 'active' : ''}
-            >
-              Dashboard
-            </Link>
-          </li>
-          <li>
-            <Link 
-              to="/aboutus2" 
-              className={isActiveLink('/aboutus2') ? 'active' : ''}
+              to="/aboutus" 
+              className={isActiveLink('/aboutus') ? 'active' : ''}
             >
               About Us
             </Link>
@@ -129,8 +129,17 @@ const Navbar2 = () => {
         <ul>
           <li>
             <Link 
-              to="/medicines1" 
-              className={isActiveLink('/medicines1') ? 'active' : ''}
+              to="/Home1" 
+              className={isActiveLink('/Home1') ? 'active' : ''}
+              onClick={handleMobileLinkClick}
+            >
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link 
+              to="/medicines2" 
+              className={isActiveLink('/medicines2') ? 'active' : ''}
               onClick={handleMobileLinkClick}
             >
               Medicines
@@ -138,8 +147,8 @@ const Navbar2 = () => {
           </li>
           <li>
             <Link 
-              to="/PendingDonations" 
-              className={isActiveLink('/PendingDonations') ? 'active' : ''}
+              to="/PendingDonations1" 
+              className={isActiveLink('/PendingDonations1') ? 'active' : ''}
               onClick={handleMobileLinkClick}
             >
               Donations
@@ -147,8 +156,8 @@ const Navbar2 = () => {
           </li>
           <li>
             <Link 
-              to="/application" 
-              className={isActiveLink('/application') ? 'active' : ''}
+              to="/application1" 
+              className={isActiveLink('/application1') ? 'active' : ''}
               onClick={handleMobileLinkClick}
             >
               Applications
@@ -156,17 +165,8 @@ const Navbar2 = () => {
           </li>
           <li>
             <Link 
-              to="/dashboard" 
-              className={isActiveLink('/dashboard') ? 'active' : ''}
-              onClick={handleMobileLinkClick}
-            >
-              Dashboard
-            </Link>
-          </li>
-          <li>
-            <Link 
-              to="/aboutus2" 
-              className={isActiveLink('/aboutus2') ? 'active' : ''}
+              to="/application1" 
+              className={isActiveLink('/application1') ? 'active' : ''}
               onClick={handleMobileLinkClick}
             >
               About Us
@@ -178,4 +178,4 @@ const Navbar2 = () => {
   );
 };
 
-export default Navbar2;
+export default Navbar1;

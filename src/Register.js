@@ -127,7 +127,7 @@ const Register = () => {
       if (response.data) {
         toast.success('Registration successful! Redirecting to login...');
         setTimeout(() => {
-          navigate('/');
+          navigate('/Login');
         }, 2000);
       } else {
         toast.error('Registration failed. Please try again.');
@@ -368,7 +368,7 @@ const Register = () => {
             <div className="auth-footer">
               <p>
                 Already have an account? 
-                <Link to="/" className="auth-link">Sign in here</Link>
+                <Link to="/Login" className="auth-link">Sign in here</Link>
               </p>
             </div>
           </div>

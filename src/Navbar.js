@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ProfileIcon from './ProfileIcon';
+import BrandSwitcher from './BrandSwitcher';
 import './Navbar.css';
 
+// Medicare Navbar
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -21,16 +23,13 @@ const Navbar = () => {
   // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
-    // Remove body scroll lock when route changes
     document.body.classList.remove('mobile-menu-open');
   }, [location]);
 
-  // Toggle mobile menu
   const toggleMobileMenu = () => {
     const newState = !isMobileMenuOpen;
     setIsMobileMenuOpen(newState);
     
-    // Prevent body scroll when mobile menu is open
     if (newState) {
       document.body.classList.add('mobile-menu-open');
     } else {
@@ -38,18 +37,15 @@ const Navbar = () => {
     }
   };
 
-  // Check if link is active
   const isActiveLink = (path) => {
     return location.pathname === path;
   };
 
-  // Handle mobile menu link click
   const handleMobileLinkClick = () => {
     setIsMobileMenuOpen(false);
     document.body.classList.remove('mobile-menu-open');
   };
 
-  // Handle click outside mobile menu
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (isMobileMenuOpen && !event.target.closest('.navbar')) {
@@ -65,11 +61,8 @@ const Navbar = () => {
   return (
     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container">
-        {/* Brand/Logo */}
-        <Link to="/Home" className="navbar-brand">
-          <div className="brand-icon">M</div>
-          <span>MediCare</span>
-        </Link>
+        {/* Brand Switcher */}
+        <BrandSwitcher currentBrand="medicare" />
 
         {/* Desktop Navigation */}
         <ul className="desktop-menu">
@@ -103,6 +96,14 @@ const Navbar = () => {
               className={isActiveLink('/apply') ? 'active' : ''}
             >
               Apply
+            </Link>
+          </li>
+          <li>
+            <Link 
+              to="/aboutus1" 
+              className={isActiveLink('/aboutus1') ? 'active' : ''}
+            >
+              About Us
             </Link>
           </li>
         </ul>
@@ -160,6 +161,15 @@ const Navbar = () => {
               onClick={handleMobileLinkClick}
             >
               Apply
+            </Link>
+          </li>
+          <li>
+            <Link 
+               to="/aboutus1" 
+               className={isActiveLink('/aboutus1') ? 'active' : ''}
+               onClick={handleMobileLinkClick}
+            >
+              About Us
             </Link>
           </li>
         </ul>
