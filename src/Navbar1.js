@@ -68,8 +68,8 @@ const Navbar1 = () => {
         <ul className="desktop-menu">
           <li>
             <Link 
-              to="/Home1" 
-              className={isActiveLink('/Home1') ? 'active' : ''}
+              to="/" 
+              className={isActiveLink('/') ? 'active' : ''}
             >
               Home
             </Link>
@@ -129,8 +129,8 @@ const Navbar1 = () => {
         <ul>
           <li>
             <Link 
-              to="/Home1" 
-              className={isActiveLink('/Home1') ? 'active' : ''}
+              to="/" 
+              className={isActiveLink('/') ? 'active' : ''}
               onClick={handleMobileLinkClick}
             >
               Home
@@ -165,8 +165,8 @@ const Navbar1 = () => {
           </li>
           <li>
             <Link 
-              to="/application1" 
-              className={isActiveLink('/application1') ? 'active' : ''}
+              to="/aboutus" 
+              className={isActiveLink('/aboutus') ? 'active' : ''}
               onClick={handleMobileLinkClick}
             >
               About Us

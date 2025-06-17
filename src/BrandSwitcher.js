@@ -19,7 +19,7 @@ const BrandSwitcher = ({ currentBrand }) => {
       icon: 'G',
       name: 'Guest Panel',
       color: '#10b981',
-      redirectPath: '/Home1'
+      redirectPath: '/'
     },
     admin: {
       icon: 'A',
