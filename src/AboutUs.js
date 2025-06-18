@@ -192,6 +192,8 @@ const AboutUs = () => {
               <div className="contact-buttons">
                 <Link to="/Login" className="btn btn-primary">Start Donating</Link>
                 <Link to="/Login" className="btn btn-secondary">Request Medicines</Link>
+                <Link to="/Login" className="btn btn-primary1">Collect Donations</Link>
+                <Link to="/Login" className="btn btn-secondary1">Distribute Medicines</Link>
               </div>
             </div>
             <div className="contact-details">

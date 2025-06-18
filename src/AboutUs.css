@@ -344,6 +344,29 @@
   transform: translateY(-2px);
 }
 
+.btn-primary1 {
+  background: linear-gradient(135deg, #71ea66, #18a00c);
+  color: white;
+  border: none;
+}
+
+.btn-primary1:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-secondary1 {
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.btn-secondary1:hover {
+  background: #32ec51;
+  color: white;
+  transform: translateY(-2px);
+}
+
 .contact-details {
   background: #f8fafc;
   padding: 40px;

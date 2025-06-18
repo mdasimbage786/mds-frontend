@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { ThemeProvider } from './ThemeProvider'; // 👈 Import your ThemeProvider
 import Home from './Home';
 import Home1 from './Home1';
 import Apply from './Apply';
@@ -17,13 +18,13 @@ import Register from './Register';
 import AboutUs from './AboutUs';
 import AboutUs1 from './AboutUs1';
 import AboutUs2 from './AboutUs2';
-import './PageTransition.css'; // 👈 Create this
+import './PageTransition.css';
 
 function AnimatedRoutes() {
   const location = useLocation();
 
   return (
-    <div className="fade-transition"> {/* 👈 Add wrapper */}
+    <div className="fade-transition">
       <Routes location={location} key={location.pathname}>
         <Route path="/Login" element={<Login />} />
         <Route path="/Home" element={<Home />} />
@@ -49,9 +50,11 @@ function AnimatedRoutes() {
 
 function App() {
   return (
-    <Router>
-      <AnimatedRoutes />
-    </Router>
+    <ThemeProvider> {/* 👈 Wrap everything with ThemeProvider */}
+      <Router>
+        <AnimatedRoutes />
+      </Router>
+    </ThemeProvider>
   );
 }
 

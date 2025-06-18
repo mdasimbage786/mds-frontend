@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from './ThemeProvider'; // Import the theme hook
 import './ProfileIcon.css';
+import './global-theme.css'; // Import the global theme CSS
 
 const ProfileIcon = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showEditProfile, setShowEditProfile] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState('');
-  const [theme, setTheme] = useState('light');
   const [userDetails, setUserDetails] = useState({
     firstName: '',
     lastName: '',
@@ -19,31 +21,41 @@ const ProfileIcon = () => {
     ngoId: '' // For NGO
   });
   
+  // Edit form state
+  const [editFormData, setEditFormData] = useState({});
+  const [isUpdating, setIsUpdating] = useState(false);
+  
+  // Use the global theme
+  const { theme, changeTheme } = useTheme(); // Removed unused 'themes'
+  
   const navigate = useNavigate();
   const menuRef = useRef(null);
   const iconRef = useRef(null);
   const profileModalRef = useRef(null);
   const settingsModalRef = useRef(null);
+  const editProfileModalRef = useRef(null);
+
+  // Apply theme to document root
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
     const role = localStorage.getItem('role') || 'user';
-    const savedTheme = localStorage.getItem('theme') || 'light';
     
     setIsLoggedIn(loggedIn);
     setUserRole(role);
-    setTheme(savedTheme);
-    
-    // Apply theme to document
-    document.documentElement.setAttribute('data-theme', savedTheme);
     
     if (loggedIn) {
       // Load user details from localStorage or fetch from API
       const savedUserDetails = localStorage.getItem('userDetails');
       if (savedUserDetails) {
-        setUserDetails(JSON.parse(savedUserDetails));
+        const userData = JSON.parse(savedUserDetails);
+        setUserDetails(userData);
+        setEditFormData(userData);
       } else {
-        // You can fetch user details from your Spring Boot backend here
+        // Fetch user details from your Spring Boot backend
         fetchUserDetails();
       }
     }
@@ -70,15 +82,58 @@ const ProfileIcon = () => {
       
       if (response.ok) {
         const userData = await response.json();
+        console.log('Fetched user data:', userData);
         setUserDetails(userData);
+        setEditFormData(userData);
         localStorage.setItem('userDetails', JSON.stringify(userData));
+      } else {
+        console.error('Failed to fetch user details:', response.status);
       }
     } catch (error) {
       console.error('Error fetching user details:', error);
     }
   };
 
-  // Close menu when clicking outside
+  const updateUserProfile = async (updatedData) => {
+    try {
+      setIsUpdating(true);
+      const token = localStorage.getItem('token');
+      const role = localStorage.getItem('role');
+      
+      if (!token) return;
+      
+      const endpoint = role === 'user' 
+        ? 'https://mds-backend-zlp1.onrender.com/api/users/profile'
+        : 'https://mds-backend-zlp1.onrender.com/api/ngos/profile';
+      
+      const response = await fetch(endpoint, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedData)
+      });
+      
+      if (response.ok) {
+        const userData = await response.json();
+        setUserDetails(userData);
+        setEditFormData(userData);
+        localStorage.setItem('userDetails', JSON.stringify(userData));
+        setShowEditProfile(false);
+        alert('Profile updated successfully!');
+      } else {
+        alert('Failed to update profile. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Error updating profile. Please try again.');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  // Close modals when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -101,6 +156,13 @@ const ProfileIcon = () => {
         !settingsModalRef.current.contains(event.target)
       ) {
         setShowSettings(false);
+      }
+
+      if (
+        editProfileModalRef.current &&
+        !editProfileModalRef.current.contains(event.target)
+      ) {
+        setShowEditProfile(false);
       }
     };
 
@@ -134,9 +196,23 @@ const ProfileIcon = () => {
   };
 
   const handleThemeChange = (newTheme) => {
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
+    changeTheme(newTheme); // Use the global theme changer
+  };
+
+  const handleEditProfile = () => {
+    setShowProfile(false);
+    setShowEditProfile(true);
+  };
+
+  const handleEditFormChange = (field, value) => {
+    setEditFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSaveProfile = () => {
+    updateUserProfile(editFormData);
   };
 
   // Get user initials for display
@@ -160,11 +236,11 @@ const ProfileIcon = () => {
   };
 
   const ProfileModal = () => (
-    <div className="modal-overlay" style={{ display: showProfile ? 'flex' : 'none' }}>
-      <div ref={profileModalRef} className="modal-content profile-modal">
+    <div className="theme-modal-overlay" style={{ display: showProfile ? 'flex' : 'none' }}>
+      <div ref={profileModalRef} className="theme-modal-content theme-card profile-modal">
         <div className="modal-header">
-          <h2>My Profile</h2>
-          <button className="modal-close" onClick={() => setShowProfile(false)}>×</button>
+          <h2 className="theme-text-primary">My Profile</h2>
+          <button className="modal-close theme-btn-secondary" onClick={() => setShowProfile(false)}>×</button>
         </div>
         <div className="modal-body">
           <div className="profile-avatar-large">
@@ -174,52 +250,47 @@ const ProfileIcon = () => {
             {userRole === 'user' ? (
               <>
                 <div className="detail-row">
-                  <label>First Name:</label>
-                  <span>{userDetails.firstName || 'Not available'}</span>
+                  <label className="theme-text-secondary">First Name:</label>
+                  <span className="theme-text-primary">{userDetails.firstName || 'Not available'}</span>
                 </div>
                 <div className="detail-row">
-                  <label>Last Name:</label>
-                  <span>{userDetails.lastName || 'Not available'}</span>
+                  <label className="theme-text-secondary">Last Name:</label>
+                  <span className="theme-text-primary">{userDetails.lastName || 'Not available'}</span>
                 </div>
               </>
             ) : (
               <>
                 <div className="detail-row">
-                  <label>NGO Name:</label>
-                  <span>{userDetails.name || 'Not available'}</span>
+                  <label className="theme-text-secondary">NGO Name:</label>
+                  <span className="theme-text-primary">{userDetails.name || 'Not available'}</span>
                 </div>
                 <div className="detail-row">
-                  <label>NGO ID:</label>
-                  <span>{userDetails.ngoId || 'Not available'}</span>
+                  <label className="theme-text-secondary">NGO ID:</label>
+                  <span className="theme-text-primary">{userDetails.ngoId || 'Not available'}</span>
                 </div>
               </>
             )}
             <div className="detail-row">
-              <label>Email:</label>
-              <span>{userDetails.email || 'Not available'}</span>
+              <label className="theme-text-secondary">Email:</label>
+              <span className="theme-text-primary">{userDetails.email || 'Not available'}</span>
             </div>
             <div className="detail-row">
-              <label>Contact Number:</label>
-              <span>{userDetails.contactNumber || 'Not available'}</span>
+              <label className="theme-text-secondary">Contact Number:</label>
+              <span className="theme-text-primary">{userDetails.contactNumber || 'Not available'}</span>
             </div>
             <div className="detail-row">
-              <label>Address:</label>
-              <span>{userDetails.address || 'Not available'}</span>
+              <label className="theme-text-secondary">Address:</label>
+              <span className="theme-text-primary">{userDetails.address || 'Not available'}</span>
             </div>
             <div className="detail-row">
-              <label>Role:</label>
-              <span className="role-badge">{userRole.toUpperCase()}</span>
+              <label className="theme-text-secondary">Role:</label>
+              <span className="role-badge theme-accent">{userRole.toUpperCase()}</span>
             </div>
           </div>
         </div>
         <div className="modal-footer">
-          <button className="btn-secondary" onClick={() => setShowProfile(false)}>Close</button>
-          <button className="btn-primary" onClick={() => {
-            setShowProfile(false);
-            // Navigate to edit profile page if you have one
-            // navigate('/edit-profile');
-            alert('Edit profile feature coming soon!');
-          }}>
+          <button className="theme-btn theme-btn-secondary" onClick={() => setShowProfile(false)}>Close</button>
+          <button className="theme-btn theme-btn-primary" onClick={handleEditProfile}>
             Edit Profile
           </button>
         </div>
@@ -227,33 +298,123 @@ const ProfileIcon = () => {
     </div>
   );
 
-  const SettingsModal = () => (
-    <div className="modal-overlay" style={{ display: showSettings ? 'flex' : 'none' }}>
-      <div ref={settingsModalRef} className="modal-content settings-modal">
+  const EditProfileModal = () => (
+    <div className="theme-modal-overlay" style={{ display: showEditProfile ? 'flex' : 'none' }}>
+      <div ref={editProfileModalRef} className="theme-modal-content theme-card edit-profile-modal">
         <div className="modal-header">
-          <h2>Settings</h2>
-          <button className="modal-close" onClick={() => setShowSettings(false)}>×</button>
+          <h2 className="theme-text-primary">Edit Profile</h2>
+          <button className="modal-close theme-btn-secondary" onClick={() => setShowEditProfile(false)}>×</button>
+        </div>
+        <div className="modal-body">
+          <div className="edit-form">
+            {userRole === 'user' ? (
+              <>
+                <div className="form-group">
+                  <label className="theme-text-secondary">First Name</label>
+                  <input
+                    type="text"
+                    className="theme-input"
+                    value={editFormData.firstName || ''}
+                    onChange={(e) => handleEditFormChange('firstName', e.target.value)}
+                    placeholder="Enter first name"
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="theme-text-secondary">Last Name</label>
+                  <input
+                    type="text"
+                    className="theme-input"
+                    value={editFormData.lastName || ''}
+                    onChange={(e) => handleEditFormChange('lastName', e.target.value)}
+                    placeholder="Enter last name"
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="form-group">
+                <label className="theme-text-secondary">NGO Name</label>
+                <input
+                  type="text"
+                  className="theme-input"
+                  value={editFormData.name || ''}
+                  onChange={(e) => handleEditFormChange('name', e.target.value)}
+                  placeholder="Enter NGO name"
+                />
+              </div>
+            )}
+            <div className="form-group">
+              <label className="theme-text-secondary">Email</label>
+              <input
+                type="email"
+                className="theme-input"
+                value={editFormData.email || ''}
+                onChange={(e) => handleEditFormChange('email', e.target.value)}
+                placeholder="Enter email"
+              />
+            </div>
+            <div className="form-group">
+              <label className="theme-text-secondary">Contact Number</label>
+              <input
+                type="tel"
+                className="theme-input"
+                value={editFormData.contactNumber || ''}
+                onChange={(e) => handleEditFormChange('contactNumber', e.target.value)}
+                placeholder="Enter contact number"
+              />
+            </div>
+            <div className="form-group">
+              <label className="theme-text-secondary">Address</label>
+              <textarea
+                className="theme-input"
+                value={editFormData.address || ''}
+                onChange={(e) => handleEditFormChange('address', e.target.value)}
+                placeholder="Enter address"
+                rows="3"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="modal-footer">
+          <button className="theme-btn theme-btn-secondary" onClick={() => setShowEditProfile(false)}>Cancel</button>
+          <button 
+            className="theme-btn theme-btn-primary" 
+            onClick={handleSaveProfile}
+            disabled={isUpdating}
+          >
+            {isUpdating ? 'Saving...' : 'Save Changes'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const SettingsModal = () => (
+    <div className="theme-modal-overlay" style={{ display: showSettings ? 'flex' : 'none' }}>
+      <div ref={settingsModalRef} className="theme-modal-content theme-card settings-modal">
+        <div className="modal-header">
+          <h2 className="theme-text-primary">Settings</h2>
+          <button className="modal-close theme-btn-secondary" onClick={() => setShowSettings(false)}>×</button>
         </div>
         <div className="modal-body">
           <div className="settings-section">
-            <h3>Appearance</h3>
+            <h3 className="theme-text-primary">Appearance</h3>
             <div className="setting-item">
-              <label>Theme:</label>
+              <label className="theme-text-secondary">Theme:</label>
               <div className="theme-options">
                 <button 
-                  className={`theme-btn ${theme === 'light' ? 'active' : ''}`}
+                  className={`theme-btn ${theme === 'light' ? 'theme-btn-primary' : 'theme-btn-secondary'}`}
                   onClick={() => handleThemeChange('light')}
                 >
                   ☀️ Light
                 </button>
                 <button 
-                  className={`theme-btn ${theme === 'dark' ? 'active' : ''}`}
+                  className={`theme-btn ${theme === 'dark' ? 'theme-btn-primary' : 'theme-btn-secondary'}`}
                   onClick={() => handleThemeChange('dark')}
                 >
                   🌙 Dark
                 </button>
                 <button 
-                  className={`theme-btn ${theme === 'auto' ? 'active' : ''}`}
+                  className={`theme-btn ${theme === 'auto' ? 'theme-btn-primary' : 'theme-btn-secondary'}`}
                   onClick={() => handleThemeChange('auto')}
                 >
                   🔄 Auto
@@ -263,16 +424,29 @@ const ProfileIcon = () => {
           </div>
           
           <div className="settings-section">
-            <h3>Notifications</h3>
+            <h3 className="theme-text-primary">Profile</h3>
             <div className="setting-item">
-              <label className="checkbox-label">
+              <button className="theme-btn theme-btn-secondary" onClick={handleEditProfile}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.4374 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Edit Profile
+              </button>
+            </div>
+          </div>
+          
+          <div className="settings-section">
+            <h3 className="theme-text-primary">Notifications</h3>
+            <div className="setting-item">
+              <label className="checkbox-label theme-text-primary">
                 <input type="checkbox" defaultChecked />
                 <span className="checkmark"></span>
                 Email notifications
               </label>
             </div>
             <div className="setting-item">
-              <label className="checkbox-label">
+              <label className="checkbox-label theme-text-primary">
                 <input type="checkbox" defaultChecked />
                 <span className="checkmark"></span>
                 SMS notifications
@@ -281,9 +455,9 @@ const ProfileIcon = () => {
           </div>
           
           <div className="settings-section">
-            <h3>Privacy</h3>
+            <h3 className="theme-text-primary">Privacy</h3>
             <div className="setting-item">
-              <label className="checkbox-label">
+              <label className="checkbox-label theme-text-primary">
                 <input type="checkbox" defaultChecked />
                 <span className="checkmark"></span>
                 Make profile visible to NGOs
@@ -292,8 +466,8 @@ const ProfileIcon = () => {
           </div>
         </div>
         <div className="modal-footer">
-          <button className="btn-secondary" onClick={() => setShowSettings(false)}>Cancel</button>
-          <button className="btn-primary" onClick={() => {
+          <button className="theme-btn theme-btn-secondary" onClick={() => setShowSettings(false)}>Close</button>
+          <button className="theme-btn theme-btn-primary" onClick={() => {
             setShowSettings(false);
             alert('Settings saved successfully!');
           }}>
@@ -306,10 +480,10 @@ const ProfileIcon = () => {
 
   return (
     <>
-      <div className="profile-container">
+      <div className="profile-container theme-surface">
         {/* Display username next to profile icon */}
         {isLoggedIn && (
-          <span className="profile-username">{getDisplayName()}</span>
+          <span className="profile-username theme-text-primary">{getDisplayName()}</span>
         )}
         
         <div 
@@ -349,25 +523,25 @@ const ProfileIcon = () => {
         </div>
 
         {showMenu && (
-          <div ref={menuRef} className={`dropdown-menu ${showMenu ? 'show' : ''}`}>
+          <div ref={menuRef} className={`dropdown-menu theme-card ${showMenu ? 'show' : ''}`}>
             <div className="menu-header">
               <div className="user-info">
                 <div className="user-avatar">
                   {isLoggedIn ? getUserInitials() : '?'}
                 </div>
                 <div className="user-details">
-                  <span className="user-name">{isLoggedIn ? getDisplayName() : 'Guest'}</span>
-                  <span className="user-status">{isLoggedIn ? 'Online' : 'Offline'}</span>
+                  <span className="user-name theme-text-primary">{isLoggedIn ? getDisplayName() : 'Guest'}</span>
+                  <span className="user-status theme-text-secondary">{isLoggedIn ? 'Online' : 'Offline'}</span>
                 </div>
               </div>
             </div>
             
-            <div className="menu-divider"></div>
+            <div className="menu-divider theme-border"></div>
             
             <div className="menu-items">
               {isLoggedIn && (
                 <>
-                  <button className="menu-item" onClick={handleProfile}>
+                  <button className="menu-item theme-text-primary" onClick={handleProfile}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                       <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="currentColor"/>
                       <path d="M12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z" fill="currentColor"/>
@@ -404,6 +578,7 @@ const ProfileIcon = () => {
 
       {/* Modals */}
       <ProfileModal />
+      <EditProfileModal/>
       <SettingsModal />
     </>
   );
