@@ -1,4 +1,4 @@
-/* Brand Switcher Styles */
+/* Brand Switcher Styles - Mobile Optimized */
 .brand-switcher {
   position: relative;
 }
@@ -8,10 +8,25 @@
   position: relative;
   padding-right: 8px;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .brand-switcher .navbar-brand:hover {
   transform: translateY(-1px);
+}
+
+/* Main brand icon styling */
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  text-align: center;
+  line-height: 32px;
 }
 
 .dropdown-arrow {
@@ -82,45 +97,98 @@
 }
 
 .dropdown-brand-icon {
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  font-size: 0.9rem;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 8px;
+  font-size: 1.1rem;
   flex-shrink: 0;
   text-align: center;
+  line-height: 32px;
 }
-
 
 /* Mobile responsive */
 @media (max-width: 768px) {
   .brand-dropdown {
-    min-width: 180px;
+    min-width: 220px;
     right: 0;
     left: auto;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   }
   
   .dropdown-item {
-    padding: 10px;
+    padding: 14px 16px;
+    gap: 16px;
+    min-height: 56px;
+  }
+
+  /* Larger icons for mobile */
+  .brand-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    font-size: 1.4rem;
+    border-radius: 10px;
+    line-height: 44px;
   }
 
   .dropdown-brand-icon {
-  font-size: 1rem;
-  width: 32px;
-  height: 32px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    font-size: 1.4rem;
+    border-radius: 10px;
+    line-height: 44px;
+  }
+
+  /* Make dropdown text larger on mobile */
+  .dropdown-item span {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .dropdown-header {
+    font-size: 0.9rem;
+    padding: 12px 16px 8px;
+  }
 }
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .brand-dropdown {
+    min-width: 200px;
+    max-width: 90vw;
+  }
+  
+  .brand-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    font-size: 1.6rem;
+    line-height: 48px;
+  }
+
+  .dropdown-brand-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    font-size: 1.6rem;
+    line-height: 48px;
+  }
+
+  .dropdown-item {
+    min-height: 64px;
+    padding: 16px;
+  }
 }
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .brand-dropdown {
-    background: rgba(91, 128, 179, 0.98);
-    border-color: rgba(75, 85, 99, 0.3);
+    background: rgba(31, 41, 55, 0.95);
+    border-color: rgba(75, 85, 99, 0.5);
   }
   
   .dropdown-header {
@@ -133,5 +201,18 @@
   
   .dropdown-item:hover {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .dropdown-item {
+    -webkit-tap-highlight-color: rgba(102, 126, 234, 0.1);
+    tap-highlight-color: rgba(102, 126, 234, 0.1);
+  }
+  
+  .dropdown-item:active {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+    transform: translateX(2px);
   }
 }

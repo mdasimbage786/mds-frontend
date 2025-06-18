@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './BrandSwitcher.css';
 
 const BrandSwitcher = ({ currentBrand }) => {
@@ -31,10 +31,9 @@ const BrandSwitcher = ({ currentBrand }) => {
 
   const currentBrandData = brands[currentBrand];
   const otherBrands = Object.entries(brands).filter(([key]) => {
-  if (currentBrand === 'guest') return key !== 'guest'; // show both admin & medicare
-  return key !== currentBrand && key !== 'guest';       // hide guest for others
-});
-
+    if (currentBrand === 'guest') return key !== 'guest'; // show both admin & medicare
+    return key !== currentBrand && key !== 'guest';       // hide guest for others
+  });
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -57,12 +56,25 @@ const BrandSwitcher = ({ currentBrand }) => {
     navigate(brands[brandKey].redirectPath);
   };
 
+  // Enhanced style function for better mobile compatibility
+  const getBrandIconStyle = (color) => ({
+    background: `linear-gradient(135deg, ${color}, ${color}dd)`,
+    backgroundColor: color, // Fallback for mobile
+    color: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 'bold',
+    border: 'none',
+    outline: 'none'
+  });
+
   return (
     <div className="brand-switcher" ref={dropdownRef}>
       <div className="navbar-brand" onClick={handleBrandClick}>
         <div 
           className="brand-icon" 
-          style={{ background: `linear-gradient(135deg, ${currentBrandData.color}, ${currentBrandData.color}dd)` }}
+          style={getBrandIconStyle(currentBrandData.color)}
         >
           {currentBrandData.icon}
         </div>
@@ -85,7 +97,7 @@ const BrandSwitcher = ({ currentBrand }) => {
             >
               <div 
                 className="dropdown-brand-icon"
-                style={{ background: `linear-gradient(135deg, ${brandData.color}, ${brandData.color}dd)` }}
+                style={getBrandIconStyle(brandData.color)}
               >
                 {brandData.icon}
               </div>
