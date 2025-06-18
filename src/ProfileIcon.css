@@ -400,7 +400,7 @@
 
 /* Modal Body */
 .modal-body {
-  padding: 30px;
+  padding: 40px;
   max-height: 60vh;
   overflow-y: auto;
 }
