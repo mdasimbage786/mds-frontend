@@ -30,7 +30,11 @@ const BrandSwitcher = ({ currentBrand }) => {
   };
 
   const currentBrandData = brands[currentBrand];
-  const otherBrands = Object.entries(brands).filter(([key]) => key !== currentBrand);
+  const otherBrands = Object.entries(brands).filter(([key]) => {
+  if (currentBrand === 'guest') return key !== 'guest'; // show both admin & medicare
+  return key !== currentBrand && key !== 'guest';       // hide guest for others
+});
+
 
   // Close dropdown when clicking outside
   useEffect(() => {
