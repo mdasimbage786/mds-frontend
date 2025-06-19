@@ -121,6 +121,7 @@
   .dropdown-item {
     padding: 14px 16px;
     gap: 16px;
+    justify-content: center;
     min-height: 56px;
   }
 
@@ -141,7 +142,15 @@
     font-size: 1.4rem;
     border-radius: 10px;
     line-height: 44px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: center;
   }
+
+  .dropdown-item span {
+    display: none;
+  } 
 }
 
 /* Extra small screens */

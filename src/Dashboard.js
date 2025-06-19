@@ -7,10 +7,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
-    totalMedicines: 0,
-    totalDonations: 0,
-    pendingApplications: 0,
-    approvedApplications: 0
+    availableMedicines: 0,
+    totalMedicineQuantity: 0,
+    pendingDonations: 0,
+    pendingDistributions: 0,
+    approvedApplications: 0,
+    totalApplications: 0
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -78,26 +80,22 @@ const Dashboard = () => {
                   </svg>
                 </div>
                 <div className="stat-content">
-                  <div className="stat-number">{stats.totalMedicines}</div>
-                  <div className="stat-label">Total Medicines Available</div>
-                  <div className="stat-description">Active medicine inventory</div>
+                  <div className="stat-number">{stats.availableMedicines}</div>
+                  <div className="stat-label">Available Medicine Types</div>
+                  <div className="stat-description">Total quantity: {stats.totalMedicineQuantity}</div>
                 </div>
               </div>
 
-              <div className="stat-card applications">
+              <div className="stat-card donations">
                 <div className="stat-icon">
                   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14,2 14,8 20,8"/>
-                    <line x1="16" y1="13" x2="8" y2="13"/>
-                    <line x1="16" y1="17" x2="8" y2="17"/>
-                    <polyline points="10,9 9,9 8,9"/>
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                   </svg>
                 </div>
                 <div className="stat-content">
-                  <div className="stat-number">{stats.totalDonations}</div>
-                  <div className="stat-label">Total Applications</div>
-                  <div className="stat-description">All submitted requests</div>
+                  <div className="stat-number">{stats.pendingDonations}</div>
+                  <div className="stat-label">Medicine Donations</div>
+                  <div className="stat-description">Available in inventory</div>
                 </div>
               </div>
 
@@ -109,9 +107,9 @@ const Dashboard = () => {
                   </svg>
                 </div>
                 <div className="stat-content">
-                  <div className="stat-number">{stats.pendingApplications}</div>
-                  <div className="stat-label">Pending Applications</div>
-                  <div className="stat-description">Awaiting approval</div>
+                  <div className="stat-number">{stats.pendingDistributions}</div>
+                  <div className="stat-label">Pending Distributions</div>
+                  <div className="stat-description">Awaiting physical delivery</div>
                 </div>
               </div>
 
@@ -125,7 +123,7 @@ const Dashboard = () => {
                 <div className="stat-content">
                   <div className="stat-number">{stats.approvedApplications}</div>
                   <div className="stat-label">Approved Applications</div>
-                  <div className="stat-description">Successfully processed</div>
+                  <div className="stat-description">Medicines allocated</div>
                 </div>
               </div>
             </div>
@@ -137,18 +135,18 @@ const Dashboard = () => {
                   <div className="insight-item">
                     <div className="insight-label">Approval Rate</div>
                     <div className="insight-value">
-                      {stats.totalDonations > 0 
-                        ? Math.round((stats.approvedApplications / stats.totalDonations) * 100) 
+                      {stats.totalApplications > 0 
+                        ? Math.round((stats.approvedApplications / stats.totalApplications) * 100) 
                         : 0}%
                     </div>
                   </div>
                   <div className="insight-item">
                     <div className="insight-label">Processing Queue</div>
-                    <div className="insight-value">{stats.pendingApplications} items</div>
+                    <div className="insight-value">{stats.pendingDistributions} items</div>
                   </div>
                   <div className="insight-item">
-                    <div className="insight-label">System Status</div>
-                    <div className="insight-value status-active">Active</div>
+                    <div className="insight-label">Total Applications</div>
+                    <div className="insight-value">{stats.totalApplications}</div>
                   </div>
                 </div>
               </div>
@@ -158,17 +156,16 @@ const Dashboard = () => {
                 <div className="action-buttons">
                   <button className="action-btn primary" onClick={() => window.location.href = '/PendingDonations'}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10"/>
-                      <polyline points="12,6 12,12 16,14"/>
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                     </svg>
                     Review Pending Donations
                   </button>
                   <button className="action-btn secondary" onClick={() => window.location.href = '/application'}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <line x1="12" y1="5" x2="12" y2="19"/>
-                      <line x1="5" y1="12" x2="19" y2="12"/>
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12,6 12,12 16,14"/>
                     </svg>
-                    Review Pending Application
+                    Process Distribution Requests
                   </button>
                   <button className="action-btn tertiary" onClick={handleRefresh}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
