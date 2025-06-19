@@ -2,7 +2,7 @@
 
 .access-denied-wrapper {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
   justify-content: center;
   align-items: center;

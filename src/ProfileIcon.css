@@ -350,7 +350,7 @@
 
 /* Profile Modal - FIXED */
 .profile-modal {
-  width: min(480px, 90vw);
+  width: min(600px, 120vw);
   min-height: 400px; /* Added minimum height */
 }
 
@@ -743,15 +743,15 @@
   }
   
   .theme-modal-content {
-    max-width: calc(100vw - 30px); /* Adjusted for better mobile fit */
-    max-height: calc(100vh - 30px); /* Adjusted for better mobile fit */
+    max-width: calc(100vw - 40px); /* Adjusted for better mobile fit */
+    max-height: calc(100vh - 40px); /* Adjusted for better mobile fit */
   }
   
   .profile-modal,
   .settings-modal,
   .edit-profile-modal {
     width: 100%;
-    min-height: 300px; /* Ensure minimum height on mobile */
+    min-height: 400px; /* Ensure minimum height on mobile */
   }
   
   .theme-options {
