@@ -110,7 +110,7 @@
 /* Mobile responsive */
 @media (max-width: 768px) {
   .brand-dropdown {
-    min-width: 220px;
+    min-width: 180px;
     right: 0;
     left: auto;
     background: rgba(255, 255, 255, 0.95);
@@ -122,26 +122,26 @@
     padding: 14px 16px;
     gap: 16px;
     justify-content: center;
-    min-height: 56px;
+    min-height: 50px;
   }
 
   /* Larger icons for mobile */
   .brand-icon {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
     font-size: 1.4rem;
-    border-radius: 10px;
+    border-radius: 9px;
     line-height: 44px;
   }
 
   .dropdown-brand-icon {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
     font-size: 1.4rem;
-    border-radius: 10px;
-    line-height: 44px;
+    border-radius: 9px;
+    line-height: 36px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -156,8 +156,8 @@
 /* Extra small screens */
 @media (max-width: 480px) {
   .brand-dropdown {
-    min-width: 200px;
-    max-width: 90vw;
+    min-width: 159px;
+    max-width: 75vw;
   }
   
   .brand-icon {
