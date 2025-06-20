@@ -111,7 +111,7 @@
 @media (max-width: 768px) {
   .brand-dropdown {
     min-width: 120px;
-    right: 0;
+    right: 1%;
     left: auto;
     background: rgba(255, 255, 255, 0.95);
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -120,7 +120,7 @@
   
   .dropdown-item {
     padding: 10px 12px;
-    gap: 16px;
+    gap: 12px;
     justify-content: center;
     min-height: 50px;
   }
