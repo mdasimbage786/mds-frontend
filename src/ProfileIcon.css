@@ -322,13 +322,12 @@
   bottom: 0;
   background: var(--modal-backdrop);
   display: flex;
-  align-items: flex-start; 
+  align-items: flex-start;
   justify-content: center;
   z-index: 2000;
   backdrop-filter: blur(4px);
-   padding: 40px 20px 20px; /* Added more top padding */
+  padding: 20px;
   box-sizing: border-box;
-  overflow-y: auto;
 }
 
 .theme-modal-content {
@@ -336,10 +335,8 @@
   border-radius: 16px;
   box-shadow: 0 20px 60px var(--shadow-heavy);
   max-width: 90vw;
-  width: 100%;
-  max-height: calc(100vh - 80px); /* Ensure modal doesn't exceed viewport height */
-  margin-top: 20px;/* Increased from 85vh to 90vh */
-  overflow: visible;
+  max-height: 90vh; /* Increased from 85vh to 90vh */
+  overflow: hidden;
   transform: scale(0.9) translateY(20px);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
@@ -385,8 +382,8 @@
 }
 
 .modal-close {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border: none;
   background: var(--bg-secondary);
   border-radius: 8px;
@@ -407,7 +404,7 @@
 
 /* Modal Body - FIXED */
 .modal-body {
-  padding: 24px; /* Reduced top/bottom padding */
+  padding: 20px 24px; /* Reduced top/bottom padding */
   overflow-y: auto;
   flex: 1;
   min-height: 0;
@@ -742,14 +739,13 @@
   }
   
   .theme-modal-overlay {
-    padding: 15px;
-    align-items: flex-start; /* Reduced padding */
+    padding: 15px; /* Reduced padding */
   }
   
   .theme-modal-content {
     max-width: calc(100vw - 30px); /* Adjusted for better mobile fit */
-    max-height: calc(100vh - 30px);
-    margin-top: 10px;  /* Adjusted for better mobile fit */
+    max-height: calc(100vh - 30px); 
+    align-content: flex-start;/* Adjusted for better mobile fit */
   }
   
   .profile-modal,
