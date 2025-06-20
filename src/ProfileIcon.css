@@ -322,11 +322,11 @@
   bottom: 0;
   background: var(--modal-backdrop);
   display: flex;
-  align-items: center; 
+  align-items: flex-start; 
   justify-content: center;
   z-index: 2000;
   backdrop-filter: blur(4px);
-  padding: 40px 20px 20px; /* Added more top padding */
+   padding: 40px 20px 20px; /* Added more top padding */
   box-sizing: border-box;
   overflow-y: auto;
 }
@@ -339,7 +339,7 @@
   width: 100%;
   max-height: calc(100vh - 80px); /* Ensure modal doesn't exceed viewport height */
   margin-top: 20px;/* Increased from 85vh to 90vh */
-  overflow: hidden;
+  overflow: visible;
   transform: scale(0.9) translateY(20px);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
