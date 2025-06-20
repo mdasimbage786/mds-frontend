@@ -1,4 +1,4 @@
-// Donate.js - Professional Version
+// Donate.js - Updated with Verification Code
 import React, { useState } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
@@ -18,6 +18,8 @@ const Donate = () => {
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [verificationCode, setVerificationCode] = useState(null);
+  const [showCode, setShowCode] = useState(false);
 
   const validateForm = () => {
     const newErrors = {};
@@ -86,7 +88,14 @@ const Donate = () => {
       });
 
       if (response.status === 201 || response.status === 200) {
-        toast.success('Donation submitted successfully! We will review and process it soon.');
+        // Extract verification code from response
+        const donationData = response.data;
+        setVerificationCode(donationData.verificationCode);
+        setShowCode(true);
+        
+        toast.success('Donation submitted successfully! Please save your verification code.');
+        
+        // Reset form
         setFormData({
           name: '',
           manufacturer: '',
@@ -106,6 +115,85 @@ const Donate = () => {
       setLoading(false);
     }
   };
+
+  const copyCodeToClipboard = () => {
+    navigator.clipboard.writeText(verificationCode);
+    toast.success('Verification code copied to clipboard!');
+  };
+
+  const handleNewDonation = () => {
+    setShowCode(false);
+    setVerificationCode(null);
+  };
+
+  if (showCode) {
+    return (
+      <div className="donate-container">
+        <Navbar />
+        
+        <div className="verification-success">
+          <div className="success-card">
+            <div className="success-icon">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            
+            <h2>Donation Submitted Successfully!</h2>
+            <p>Your medicine donation has been submitted for review. Please save the verification code below.</p>
+            
+            <div className="verification-code-display">
+              <label>Your Verification Code:</label>
+              <div className="code-container">
+                <span className="verification-code">{verificationCode}</span>
+                <button 
+                  onClick={copyCodeToClipboard}
+                  className="copy-btn"
+                  title="Copy to clipboard"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 4H18C19.1046 4 20 4.89543 20 6V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V6C4 4.89543 4.89543 4 6 4H8M16 4C16 2.89543 15.1046 2 14 2H10C8.89543 2 8 2.89543 8 4M16 4C16 5.10457 15.1046 6 14 6H10C8.89543 6 8 5.10457 8 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <div className="important-note">
+              <h4>⚠️ Important:</h4>
+              <ul>
+                <li>Save this verification code safely</li>
+                <li>NGO will need this code to mark your donation as collected</li>
+                <li>This code cannot be retrieved later</li>
+                <li>You will be contacted for pickup arrangement</li>
+              </ul>
+            </div>
+            
+            <div className="action-buttons">
+              <button 
+                onClick={handleNewDonation}
+                className="new-donation-btn"
+              >
+                Make Another Donation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <ToastContainer 
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="donate-container">
@@ -269,14 +357,18 @@ const Donate = () => {
             </div>
             <div className="process-step">
               <span className="step-number">2</span>
-              <span className="step-text">We review your submission</span>
+              <span className="step-text">Get verification code</span>
             </div>
             <div className="process-step">
               <span className="step-number">3</span>
-              <span className="step-text">Schedule pickup if approved</span>
+              <span className="step-text">NGO contacts for pickup</span>
             </div>
             <div className="process-step">
               <span className="step-number">4</span>
+              <span className="step-text">NGO verifies with your code</span>
+            </div>
+            <div className="process-step">
+              <span className="step-number">5</span>
               <span className="step-text">Medicines reach those in need</span>
             </div>
           </div>

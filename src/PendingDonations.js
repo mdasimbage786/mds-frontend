@@ -12,6 +12,11 @@ const PendingDonations = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [processingId, setProcessingId] = useState(null);
+  const [verificationModal, setVerificationModal] = useState({
+    show: false,
+    donationId: null,
+    code: ''
+  });
 
   useEffect(() => {
     fetchPendingDonations();
@@ -29,36 +34,73 @@ const PendingDonations = () => {
     }
   };
 
-  const handleApprove = async (id) => {
+  const handleMarkAsCollected = (donationId) => {
+    setVerificationModal({
+      show: true,
+      donationId: donationId,
+      code: ''
+    });
+  };
+
+  const handleVerificationSubmit = async () => {
+    if (!verificationModal.code.trim()) {
+      toast.error('Please enter the verification code');
+      return;
+    }
+
     try {
-      setProcessingId(id);
-      await axios.put(`https://mds-backend-zlp1.onrender.com/api/pending-donations/${id}/approve`);
-      const updated = pendingDonations.filter(d => d.id !== id);
-      setPendingDonations(updated);
-      setFilteredDonations(updated);
-      toast.success('Donation approved and added to stock!', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      setProcessingId(verificationModal.donationId);
+      
+      const response = await axios.put(
+        `https://mds-backend-zlp1.onrender.com/api/pending-donations/${verificationModal.donationId}/approve?code=${verificationModal.code}`
+      );
+
+      if (response.status === 200) {
+        const updated = pendingDonations.filter(d => d.id !== verificationModal.donationId);
+        setPendingDonations(updated);
+        setFilteredDonations(updated);
+        
+        toast.success('Donation approved and added to stock!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        
+        setVerificationModal({ show: false, donationId: null, code: '' });
+      }
     } catch (err) {
       console.error("Approval failed", err);
-      toast.error('Failed to approve donation. Please try again.', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      
+      if (err.response && err.response.status === 403) {
+        toast.error('Invalid verification code. Please check and try again.', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      } else {
+        toast.error('Failed to approve donation. Please try again.', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      }
     } finally {
       setProcessingId(null);
     }
   };
 
+  const handleModalClose = () => {
+    setVerificationModal({ show: false, donationId: null, code: '' });
+  };
 
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
@@ -193,7 +235,7 @@ const PendingDonations = () => {
                   <div className="card-actions">
                     <button 
                       className="approve-btn"
-                      onClick={() => handleApprove(donation.id)}
+                      onClick={() => handleMarkAsCollected(donation.id)}
                       disabled={processingId === donation.id}
                     >
                       {processingId === donation.id ? (
@@ -217,6 +259,68 @@ const PendingDonations = () => {
           )}
         </div>
       </div>
+
+      {/* Verification Modal */}
+      {verificationModal.show && (
+        <div className="modal-overlay">
+          <div className="verification-modal">
+            <div className="modal-header">
+              <h3>Enter Verification Code</h3>
+              <button 
+                className="close-btn"
+                onClick={handleModalClose}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </div>
+            
+            <div className="modal-body">
+              <p>Please enter the verification code provided by the donor to confirm collection:</p>
+              
+              <div className="verification-input-group">
+                <label htmlFor="verificationCode">Verification Code:</label>
+                <input
+                  type="text"
+                  id="verificationCode"
+                  value={verificationModal.code}
+                  onChange={(e) => setVerificationModal({
+                    ...verificationModal,
+                    code: e.target.value
+                  })}
+                  placeholder="Enter 4 or 6 digit code"
+                  maxLength="6"
+                  className="verification-input"
+                />
+              </div>
+              
+              <div className="modal-actions">
+                <button 
+                  className="cancel-btn"
+                  onClick={handleModalClose}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className="confirm-btn"
+                  onClick={handleVerificationSubmit}
+                  disabled={processingId === verificationModal.donationId}
+                >
+                  {processingId === verificationModal.donationId ? (
+                    <>
+                      <div className="button-spinner"></div>
+                      Verifying...
+                    </>
+                  ) : (
+                    'Confirm Collection'
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <ToastContainer 
         position="top-right"
