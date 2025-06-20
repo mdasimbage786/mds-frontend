@@ -1,4 +1,4 @@
-/* ProfileIcon.css - FIXED Z-INDEX ISSUES */
+/* ProfileIcon.css - Fixed Version */
 
 /* CSS Variables for Theming */
 :root[data-theme="light"] {
@@ -79,13 +79,13 @@
   }
 }
 
-/* Profile Container - INCREASED Z-INDEX */
+/* Profile Container */
 .profile-container {
   position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
-  z-index: 9998; /* Increased from 1000 */
+  z-index: 1000;
 }
 
 /* Profile Username */
@@ -112,8 +112,6 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 8px var(--shadow-light);
   overflow: hidden;
-  /* Ensure icon stays on top */
-  z-index: 9999;
 }
 
 .profile-icon:hover {
@@ -162,10 +160,9 @@
   border: 2px solid var(--bg-primary);
   border-radius: 50%;
   transition: all 0.2s ease;
-  z-index: 10000; /* Ensure status dot is always visible */
 }
 
-/* Dropdown Menu - SIGNIFICANTLY INCREASED Z-INDEX */
+/* Dropdown Menu */
 .dropdown-menu {
   position: absolute;
   top: calc(100% + 8px);
@@ -179,11 +176,9 @@
   visibility: hidden;
   transform: translateY(-10px) scale(0.95);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 10001; /* Increased from 1001 to 10001 */
+  z-index: 1001;
   overflow: hidden;
   backdrop-filter: blur(10px);
-  /* Force new stacking context */
-  isolation: isolate;
 }
 
 .dropdown-menu.show {
@@ -204,7 +199,6 @@
   border-bottom: none;
   border-right: none;
   transform: rotate(45deg);
-  z-index: 10002; /* Ensure arrow is visible */
 }
 
 /* Menu Header */
@@ -212,8 +206,6 @@
   padding: 20px;
   background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
   color: white;
-  position: relative;
-  z-index: 10003;
 }
 
 .user-info {
@@ -266,8 +258,6 @@
 /* Menu Items */
 .menu-items {
   padding: 8px 0;
-  position: relative;
-  z-index: 10003;
 }
 
 .menu-item {
@@ -323,7 +313,7 @@
   background: rgba(0, 123, 255, 0.1);
 }
 
-/* Modal Styles - MAXIMUM Z-INDEX */
+/* Modal Styles - FIXED VERSION */
 .theme-modal-overlay {
   position: fixed;
   top: 0;
@@ -332,15 +322,13 @@
   bottom: 0;
   background: var(--modal-backdrop);
   display: flex;
-  align-items: flex-start;
+  align-items: flex-start; 
   justify-content: center;
-  z-index: 99999; /* Maximum priority - increased from 2000 */
+  z-index: 2000;
   backdrop-filter: blur(4px);
-  padding: 40px 20px 20px;
+   padding: 40px 20px 20px; /* Added more top padding */
   box-sizing: border-box;
   overflow-y: auto;
-  /* Force new stacking context */
-  isolation: isolate;
 }
 
 .theme-modal-content {
@@ -349,25 +337,24 @@
   box-shadow: 0 20px 60px var(--shadow-heavy);
   max-width: 90vw;
   width: 100%;
-  max-height: calc(100vh - 80px);
-  margin-top: 20px;
+  max-height: calc(100vh - 80px); /* Ensure modal doesn't exceed viewport height */
+  margin-top: 20px;/* Increased from 85vh to 90vh */
   overflow: hidden;
   transform: scale(0.9) translateY(20px);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   position: relative;
-  /* Ensure modal content is on top */
-  z-index: 100000;
 }
 
 .theme-modal-overlay[style*="flex"] .theme-modal-content {
   transform: scale(1) translateY(0);
 }
 
-/* Profile Modal */
+/* Profile Modal - FIXED */
 .profile-modal {
   width: min(480px, 90vw);
+  min-height: 400px; /* Added minimum height */
 }
 
 /* Edit Profile Modal */
@@ -388,8 +375,6 @@
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
-  position: relative;
-  z-index: 100001;
 }
 
 .modal-header h2 {
@@ -412,8 +397,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  z-index: 100002; /* Ensure close button is always clickable */
 }
 
 .modal-close:hover {
@@ -422,14 +405,13 @@
   transform: scale(1.05);
 }
 
-/* Modal Body */
+/* Modal Body - FIXED */
 .modal-body {
-  padding: 24px;
+  padding: 24px; /* Reduced top/bottom padding */
   overflow-y: auto;
   flex: 1;
   min-height: 0;
-  position: relative;
-  z-index: 100001;
+  /* Remove any height constraints that might be causing issues */
 }
 
 .modal-body::-webkit-scrollbar {
@@ -450,7 +432,7 @@
   background: var(--text-muted);
 }
 
-/* Profile Avatar Large */
+/* Profile Avatar Large - FIXED */
 .profile-avatar-large {
   width: 80px;
   height: 80px;
@@ -462,28 +444,31 @@
   justify-content: center;
   font-size: 24px;
   font-weight: 600;
-  margin: 0 auto 24px;
+  margin: 0 auto 20px; /* Reduced bottom margin from 24px to 20px */
   box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
   flex-shrink: 0;
 }
 
-/* Profile Details */
+/* Profile Details - FIXED */
 .profile-details {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px; /* Reduced gap from 16px to 12px */
+  width: 100%;
 }
 
 .detail-row {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 12px 0;
+  padding: 10px 0; /* Reduced padding from 12px to 10px */
   border-bottom: 1px solid var(--border-color);
+  min-height: auto; /* Ensure no minimum height constraints */
 }
 
 .detail-row:last-child {
   border-bottom: none;
+  padding-bottom: 0; /* Remove bottom padding on last item */
 }
 
 .detail-row label {
@@ -492,6 +477,7 @@
   min-width: 120px;
   font-size: 14px;
   flex-shrink: 0;
+  line-height: 1.3; /* Added line height for better text alignment */
 }
 
 .detail-row span {
@@ -499,6 +485,7 @@
   font-size: 14px;
   word-break: break-word;
   flex: 1;
+  line-height: 1.3; /* Added line height for better text alignment */
 }
 
 .role-badge {
@@ -510,6 +497,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  display: inline-block; /* Ensure proper display */
 }
 
 /* Form Styles for Edit Profile */
@@ -607,8 +595,6 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  position: relative;
-  z-index: 1; /* Ensure buttons are clickable */
 }
 
 .theme-btn:hover {
@@ -682,16 +668,14 @@
   transform: rotate(45deg);
 }
 
-/* Modal Footer */
+/* Modal Footer - FIXED */
 .modal-footer {
-  padding: 16px 24px 24px;
+  padding: 16px 24px 20px; /* Slightly increased bottom padding */
   border-top: 1px solid var(--border-color);
   display: flex;
   gap: 12px;
   justify-content: flex-end;
   flex-shrink: 0;
-  position: relative;
-  z-index: 100001;
 }
 
 /* Theme Button Classes */
@@ -710,8 +694,6 @@
   justify-content: center;
   background: var(--bg-secondary);
   color: var(--text-primary);
-  position: relative;
-  z-index: 1;
 }
 
 .theme-btn:hover {
@@ -748,23 +730,7 @@
   border-color: var(--text-muted);
 }
 
-/* FORCE VISIBILITY UTILITY CLASSES */
-.force-visible {
-  z-index: 99999 !important;
-  position: relative !important;
-}
-
-.force-modal-visible {
-  z-index: 100000 !important;
-  position: fixed !important;
-}
-
-.force-dropdown-visible {
-  z-index: 10001 !important;
-  position: absolute !important;
-}
-
-/* Responsive Design */
+/* Responsive Design - UPDATED */
 @media (max-width: 768px) {
   .profile-username {
     display: none;
@@ -773,28 +739,24 @@
   .dropdown-menu {
     min-width: 260px;
     right: -10px;
-    /* Maintain high z-index on mobile */
-    z-index: 10001;
   }
   
   .theme-modal-overlay {
-    padding: 20px 10px 10px;
-    align-items: flex-start;
-    /* Maintain maximum z-index on mobile */
-    z-index: 99999;
+    padding: 15px;
+    align-items: flex-start; /* Reduced padding */
   }
   
   .theme-modal-content {
-    max-width: calc(100vw - 20px);
-    max-height: calc(100vh - 40px);
-    margin-top: 10px;
-    z-index: 100000;
+    max-width: calc(100vw - 30px); /* Adjusted for better mobile fit */
+    max-height: calc(100vh - 30px);
+    margin-top: 10px;  /* Adjusted for better mobile fit */
   }
   
   .profile-modal,
   .settings-modal,
   .edit-profile-modal {
     width: 100%;
+    min-height: 300px; /* Ensure minimum height on mobile */
   }
   
   .theme-options {
@@ -804,18 +766,28 @@
   .theme-btn {
     justify-content: center;
   }
+  
+  /* Better mobile spacing */
+  .modal-body {
+    padding: 16px 20px;
+  }
+  
+  .profile-avatar-large {
+    width: 70px;
+    height: 70px;
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
 }
 
 @media (max-width: 480px) {
   .theme-modal-overlay {
-    padding: 15px 5px 5px;
-    z-index: 99999;
+    padding: 15px 5px 5px; /* Further reduced padding for small screens */
   }
   
   .theme-modal-content {
     max-height: calc(100vh - 30px);
     margin-top: 5px;
-    z-index: 100000;
   }
   
   .modal-header {
@@ -823,7 +795,7 @@
   }
   
   .modal-body {
-    padding: 16px;
+    padding: 12px 16px; /* Further reduced padding */
   }
   
   .modal-footer {
@@ -838,6 +810,7 @@
   .detail-row {
     flex-direction: column;
     gap: 4px;
+    padding: 8px 0; /* Reduced padding */
   }
   
   .detail-row label {
@@ -847,8 +820,12 @@
   .profile-avatar-large {
     width: 60px;
     height: 60px;
-    font-size: 20px;
-    margin-bottom: 16px;
+    font-size: 18px;
+    margin-bottom: 12px; /* Further reduced margin */
+  }
+  
+  .profile-details {
+    gap: 8px; /* Reduced gap on small screens */
   }
 }
 
