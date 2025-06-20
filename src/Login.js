@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Login.css';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -7,24 +7,30 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const [role, setRole] = useState('user');
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: '', password: '', ngoId: '' });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = new URLSearchParams(location.search).get('from');
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-    
+
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
+    }
+
+    if (role === 'ngo' && !formData.ngoId.trim()) {
+      newErrors.ngoId = 'NGO ID is required';
     }
 
     setErrors(newErrors);
@@ -34,30 +40,35 @@ const Login = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
-    // Clear error when user starts typing
+
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       toast.error('Please fill all required fields correctly');
       return;
     }
 
-    const endpoint = role === 'user'
-      ? 'https://mds-backend-zlp1.onrender.com/api/users/login'
-      : 'https://mds-backend-zlp1.onrender.com/api/ngos/login';
+    const endpoint =
+      role === 'user'
+        ? 'https://mds-backend-zlp1.onrender.com/api/users/login'
+        : 'https://mds-backend-zlp1.onrender.com/api/ngos/login';
+
+    const payload =
+      role === 'ngo'
+        ? { email: formData.email, password: formData.password, ngoId: formData.ngoId }
+        : { email: formData.email, password: formData.password };
 
     setLoading(true);
 
     try {
-      const res = await axios.post(endpoint, formData, {
-        headers: { 'Content-Type': 'application/json' }
+      const res = await axios.post(endpoint, payload, {
+        headers: { 'Content-Type': 'application/json' },
       });
 
       const token = res.data?.token || 'mock-token';
@@ -66,9 +77,23 @@ const Login = () => {
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('role', role);
 
+        if (res.data.ngoId) {
+          localStorage.setItem('ngoId', res.data.ngoId);
+        }
+
         toast.success('Login successful! Redirecting...');
         setTimeout(() => {
-          navigate(role === 'ngo' ? '/medicines1' : '/Home');
+          if (role === 'ngo') {
+            if (from === 'pendingdonations') {
+              navigate('/PendingDonations');
+            } else if (from === 'applications') {
+              navigate('/application');
+            } else {
+              navigate('/medicines1');
+            }
+          } else {
+            navigate('/Home');
+          }
         }, 1000);
       } else {
         toast.error('Invalid login credentials.');
@@ -129,6 +154,25 @@ const Login = () => {
                 {errors.email && <span className="error-text">{errors.email}</span>}
               </div>
 
+              {role === 'ngo' && (
+                <div className="form-group">
+                  <label htmlFor="ngoId">
+                    NGO ID <span className="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="ngoId"
+                    name="ngoId"
+                    value={formData.ngoId}
+                    onChange={handleChange}
+                    className={errors.ngoId ? 'error' : ''}
+                    placeholder="Enter your NGO ID"
+                    disabled={loading}
+                  />
+                  {errors.ngoId && <span className="error-text">{errors.ngoId}</span>}
+                </div>
+              )}
+
               <div className="form-group">
                 <label htmlFor="password">
                   Password <span className="required">*</span>
@@ -146,11 +190,7 @@ const Login = () => {
                 {errors.password && <span className="error-text">{errors.password}</span>}
               </div>
 
-              <button 
-                type="submit" 
-                className="submit-button"
-                disabled={loading}
-              >
+              <button type="submit" className="submit-button" disabled={loading}>
                 {loading ? (
                   <>
                     <span className="spinner"></span>
@@ -164,16 +204,21 @@ const Login = () => {
 
             <div className="auth-footer">
               <p>
-                Don't have an account? 
-                <Link to="/register" className="auth-link">Create one here</Link>
+                Don't have an account?{' '}
+                <Link to="/register" className="auth-link">
+                  Create one here
+                </Link>
               </p>
             </div>
           </div>
 
           <div className="auth-info">
             <h3>Medicine Distribution System</h3>
-            <p>Connecting people with essential medicines through trusted NGO partners. Join our platform to make healthcare accessible for everyone.</p>
-            
+            <p>
+              Connecting people with essential medicines through trusted NGO partners. Join our
+              platform to make healthcare accessible for everyone.
+            </p>
+
             <div className="features">
               <div className="feature">
                 <span className="feature-icon">🏥</span>
@@ -196,13 +241,35 @@ const Login = () => {
         <div className="footer-content">
           <div className="footer-section">
             <h4>Contact Us</h4>
-            <p>📧 <a href="mailto:asimbage0786@gmail.com">support@gmail.com</a></p>
-            <p>📞 <a href="tel:+919686117020">+91 9686117020</a></p>
+            <p>
+              📧 <a href="mailto:asimbage0786@gmail.com">support@gmail.com</a>
+            </p>
+            <p>
+              📞 <a href="tel:+919686117020">+91 9686117020</a>
+            </p>
           </div>
           <div className="footer-section">
             <h4>Follow Us</h4>
-            <p>🔗 <a href="https://www.linkedin.com/in/mohammedasim-bage-4290b22a9" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
-            <p>📸 <a href="https://www.instagram.com/mdasimb_18" target="_blank" rel="noopener noreferrer">Instagram</a></p>
+            <p>
+              🔗{' '}
+              <a
+                href="https://www.linkedin.com/in/mohammedasim-bage-4290b22a9"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LinkedIn
+              </a>
+            </p>
+            <p>
+              📸{' '}
+              <a
+                href="https://www.instagram.com/mdasimb_18"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Instagram
+              </a>
+            </p>
           </div>
           <div className="footer-section">
             <h4>Medicine Distribution System</h4>
@@ -214,18 +281,7 @@ const Login = () => {
         </div>
       </footer>
 
-      <ToastContainer 
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
+      <ToastContainer theme="colored" />
     </div>
   );
 };
