@@ -21,6 +21,8 @@ const Apply = () => {
   const [searchCity, setSearchCity] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [verificationCode, setVerificationCode] = useState('');
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,6 +91,11 @@ const Apply = () => {
     }
   };
 
+  const copyVerificationCode = () => {
+    navigator.clipboard.writeText(verificationCode);
+    toast.success('Verification code copied to clipboard!');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -112,7 +119,7 @@ const Apply = () => {
     setLoading(true);
 
     try {
-      await axios.post('https://mds-backend-zlp1.onrender.com/api/applications', form);
+      const response = await axios.post('https://mds-backend-zlp1.onrender.com/api/applications', form);
 
       const updatedQty = selected.quantity - requestedQty;
       if (updatedQty > 0) {
@@ -124,7 +131,9 @@ const Apply = () => {
         await axios.delete(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`);
       }
 
-      toast.success("Application submitted successfully! We will contact you soon.");
+      // Set verification code and show modal
+      setVerificationCode(response.data.verificationCode);
+      setShowVerificationModal(true);
 
       // Reset form
       setForm({
@@ -335,7 +344,8 @@ const Apply = () => {
             <li>Ensure all information provided is accurate</li>
             <li>Valid prescription may be required for certain medicines</li>
             <li>Applications are processed within 24-48 hours</li>
-            <li>You will be contacted for verification</li>
+            <li>You will receive a verification code after submission</li>
+            <li>Present the verification code during medicine pickup</li>
             <li>Medicines are distributed through partner NGOs</li>
           </ul>
           
@@ -346,6 +356,41 @@ const Apply = () => {
           </div>
         </div>
       </div>
+
+      {/* Verification Code Modal */}
+      {showVerificationModal && (
+        <div className="modal-overlay">
+          <div className="verification-modal">
+            <div className="modal-header">
+              <h2>✅ Application Submitted Successfully!</h2>
+            </div>
+            <div className="modal-body">
+              <p>Your application has been submitted successfully. Please save your verification code:</p>
+              <div className="verification-code-display">
+                <span className="verification-code">{verificationCode}</span>
+                <button onClick={copyVerificationCode} className="copy-btn">📋 Copy</button>
+              </div>
+              <div className="modal-info">
+                <p><strong>Important:</strong></p>
+                <ul>
+                  <li>Save this verification code safely</li>
+                  <li>You'll need this code during medicine pickup</li>
+                  <li>NGO will verify this code before distribution</li>
+                  <li>We will contact you within 24-48 hours</li>
+                </ul>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button 
+                onClick={() => setShowVerificationModal(false)} 
+                className="modal-close-btn"
+              >
+                Got it!
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <ToastContainer 
         position="top-right"
@@ -381,6 +426,116 @@ const Apply = () => {
           <p>&copy; 2024 Medicine Distribution System. All rights reserved.</p>
         </div>
       </footer>
+
+      <style jsx>{`
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+        }
+
+        .verification-modal {
+          background: white;
+          border-radius: 12px;
+          padding: 30px;
+          max-width: 500px;
+          width: 90%;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+          animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+          from {
+            opacity: 0;
+            transform: translateY(-30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .modal-header h2 {
+          color: #22c55e;
+          margin: 0 0 20px 0;
+          text-align: center;
+        }
+
+        .verification-code-display {
+          background: #f0f9ff;
+          border: 2px solid #0ea5e9;
+          border-radius: 8px;
+          padding: 20px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin: 20px 0;
+        }
+
+        .verification-code {
+          font-family: 'Courier New', monospace;
+          font-size: 24px;
+          font-weight: bold;
+          color: #0ea5e9;
+          letter-spacing: 2px;
+        }
+
+        .copy-btn {
+          background: #0ea5e9;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 14px;
+          transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+          background: #0284c7;
+        }
+
+        .modal-info {
+          background: #fef3c7;
+          border-left: 4px solid #f59e0b;
+          padding: 15px;
+          margin: 20px 0;
+          border-radius: 0 8px 8px 0;
+        }
+
+        .modal-info ul {
+          margin: 10px 0 0 0;
+          padding-left: 20px;
+        }
+
+        .modal-info li {
+          margin: 5px 0;
+          color: #92400e;
+        }
+
+        .modal-close-btn {
+          background: #22c55e;
+          color: white;
+          border: none;
+          padding: 12px 30px;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 16px;
+          width: 100%;
+          transition: background 0.2s;
+        }
+
+        .modal-close-btn:hover {
+          background: #16a34a;
+        }
+      `}</style>
     </div>
   );
 };
