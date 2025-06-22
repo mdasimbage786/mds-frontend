@@ -213,7 +213,7 @@ const Apply = () => {
             <div className="action-buttons">
               <button 
                 onClick={handleNewApplication}
-                className="new-application-btn"
+                className="new-donation-btn"
               >
                 Apply for Another Medicine
               </button>
