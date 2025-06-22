@@ -21,8 +21,8 @@ const Apply = () => {
   const [searchCity, setSearchCity] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const [verificationCode, setVerificationCode] = useState('');
-  const [showVerificationModal, setShowVerificationModal] = useState(false);
+  const [verificationCode, setVerificationCode] = useState(null);
+  const [showCode, setShowCode] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,11 +91,6 @@ const Apply = () => {
     }
   };
 
-  const copyVerificationCode = () => {
-    navigator.clipboard.writeText(verificationCode);
-    toast.success('Verification code copied to clipboard!');
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -121,33 +116,37 @@ const Apply = () => {
     try {
       const response = await axios.post('https://mds-backend-zlp1.onrender.com/api/applications', form);
 
-      const updatedQty = selected.quantity - requestedQty;
-      if (updatedQty > 0) {
-        await axios.put(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`, {
-          ...selected,
-          quantity: updatedQty
+      if (response.status === 201 || response.status === 200) {
+        // Extract verification code from response
+        const applicationData = response.data;
+        setVerificationCode(applicationData.verificationCode);
+        setShowCode(true);
+
+        const updatedQty = selected.quantity - requestedQty;
+        if (updatedQty > 0) {
+          await axios.put(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`, {
+            ...selected,
+            quantity: updatedQty
+          });
+        } else {
+          await axios.delete(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`);
+        }
+
+        toast.success("Application submitted successfully! Please save your verification code.");
+
+        // Reset form
+        setForm({
+          selectedMedicine: '',
+          quantity: '',
+          ngo: '',
+          name: '',
+          mobile: '',
+          address: ''
         });
-      } else {
-        await axios.delete(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`);
+        setSearchCity('');
+        setFilteredNgos(ngos);
+        setErrors({});
       }
-
-      // Set verification code and show modal
-      setVerificationCode(response.data.verificationCode);
-      setShowVerificationModal(true);
-
-      // Reset form
-      setForm({
-        selectedMedicine: '',
-        quantity: '',
-        ngo: '',
-        name: '',
-        mobile: '',
-        address: ''
-      });
-      setSearchCity('');
-      setFilteredNgos(ngos);
-      setErrors({});
-
     } catch (error) {
       console.error("Error submitting application:", error);
       toast.error("Failed to submit application. Please try again.");
@@ -156,7 +155,109 @@ const Apply = () => {
     }
   };
 
+  const copyCodeToClipboard = () => {
+    navigator.clipboard.writeText(verificationCode);
+    toast.success('Verification code copied to clipboard!');
+  };
+
+  const handleNewApplication = () => {
+    setShowCode(false);
+    setVerificationCode(null);
+  };
+
   const selectedMedicine = medicines.find(m => m.name === form.selectedMedicine);
+
+  if (showCode) {
+    return (
+      <div className="apply-container">
+        <Navbar />
+        
+        <div className="verification-success">
+          <div className="success-card">
+            <div className="success-icon">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            
+            <h2>Application Submitted Successfully!</h2>
+            <p>Your medicine application has been submitted for review. Please save the verification code below.</p>
+            
+            <div className="verification-code-display">
+              <label>Your Verification Code:</label>
+              <div className="code-container">
+                <span className="verification-code">{verificationCode}</span>
+                <button 
+                  onClick={copyCodeToClipboard}
+                  className="copy-btn"
+                  title="Copy to clipboard"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 4H18C19.1046 4 20 4.89543 20 6V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V6C4 4.89543 4.89543 4 6 4H8M16 4C16 2.89543 15.1046 2 14 2H10C8.89543 2 8 2.89543 8 4M16 4C16 5.10457 15.1046 6 14 6H10C8.89543 6 8 5.10457 8 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <div className="important-note">
+              <h4>⚠️ Important:</h4>
+              <ul>
+                <li>Save this verification code safely</li>
+                <li>NGO will need this code to mark your application as distributed</li>
+                <li>This code cannot be retrieved later</li>
+                <li>You will be contacted for pickup arrangement</li>
+                <li>Applications are processed within 24-48 hours</li>
+              </ul>
+            </div>
+            
+            <div className="action-buttons">
+              <button 
+                onClick={handleNewApplication}
+                className="new-application-btn"
+              >
+                Apply for Another Medicine
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <ToastContainer 
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+
+        <footer className="professional-footer">
+          <div className="footer-content">
+            <div className="footer-section">
+              <h4>Contact Us</h4>
+              <p>📧 <a href="mailto:asimbage0786@gmail.com">support@gmail.com</a></p>
+              <p>📞 <a href="tel:+919686117020">+91 9686117020</a></p>
+            </div>
+            <div className="footer-section">
+              <h4>Follow Us</h4>
+              <p>🔗 <a href="https://www.linkedin.com/in/mohammedasim-bage-4290b22a9" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
+              <p>📸 <a href="https://www.instagram.com/mdasimb_18" target="_blank" rel="noopener noreferrer">Instagram</a></p>
+            </div>
+            <div className="footer-section">
+              <h4>Medicine Distribution System</h4>
+              <p>Connecting people with essential medicines through trusted NGO partners</p>
+            </div>
+          </div>
+          <div className="footer-bottom">
+            <p>&copy; 2024 Medicine Distribution System. All rights reserved.</p>
+          </div>
+        </footer>
+      </div>
+    );
+  }
 
   return (
     <div className="apply-container">
@@ -344,9 +445,9 @@ const Apply = () => {
             <li>Ensure all information provided is accurate</li>
             <li>Valid prescription may be required for certain medicines</li>
             <li>Applications are processed within 24-48 hours</li>
-            <li>You will receive a verification code after submission</li>
-            <li>Present the verification code during medicine pickup</li>
+            <li>You will be contacted for verification</li>
             <li>Medicines are distributed through partner NGOs</li>
+            <li>Save your verification code for pickup confirmation</li>
           </ul>
           
           <div className="contact-info">
@@ -356,41 +457,6 @@ const Apply = () => {
           </div>
         </div>
       </div>
-
-      {/* Verification Code Modal */}
-      {showVerificationModal && (
-        <div className="modal-overlay">
-          <div className="verification-modal">
-            <div className="modal-header">
-              <h2>✅ Application Submitted Successfully!</h2>
-            </div>
-            <div className="modal-body">
-              <p>Your application has been submitted successfully. Please save your verification code:</p>
-              <div className="verification-code-display">
-                <span className="verification-code">{verificationCode}</span>
-                <button onClick={copyVerificationCode} className="copy-btn">📋 Copy</button>
-              </div>
-              <div className="modal-info">
-                <p><strong>Important:</strong></p>
-                <ul>
-                  <li>Save this verification code safely</li>
-                  <li>You'll need this code during medicine pickup</li>
-                  <li>NGO will verify this code before distribution</li>
-                  <li>We will contact you within 24-48 hours</li>
-                </ul>
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button 
-                onClick={() => setShowVerificationModal(false)} 
-                className="modal-close-btn"
-              >
-                Got it!
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <ToastContainer 
         position="top-right"
@@ -426,116 +492,6 @@ const Apply = () => {
           <p>&copy; 2024 Medicine Distribution System. All rights reserved.</p>
         </div>
       </footer>
-
-      <style jsx>{`
-        .modal-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.5);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          z-index: 1000;
-        }
-
-        .verification-modal {
-          background: white;
-          border-radius: 12px;
-          padding: 30px;
-          max-width: 500px;
-          width: 90%;
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-          animation: modalSlideIn 0.3s ease-out;
-        }
-
-        @keyframes modalSlideIn {
-          from {
-            opacity: 0;
-            transform: translateY(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .modal-header h2 {
-          color: #22c55e;
-          margin: 0 0 20px 0;
-          text-align: center;
-        }
-
-        .verification-code-display {
-          background: #f0f9ff;
-          border: 2px solid #0ea5e9;
-          border-radius: 8px;
-          padding: 20px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin: 20px 0;
-        }
-
-        .verification-code {
-          font-family: 'Courier New', monospace;
-          font-size: 24px;
-          font-weight: bold;
-          color: #0ea5e9;
-          letter-spacing: 2px;
-        }
-
-        .copy-btn {
-          background: #0ea5e9;
-          color: white;
-          border: none;
-          padding: 8px 16px;
-          border-radius: 6px;
-          cursor: pointer;
-          font-size: 14px;
-          transition: background 0.2s;
-        }
-
-        .copy-btn:hover {
-          background: #0284c7;
-        }
-
-        .modal-info {
-          background: #fef3c7;
-          border-left: 4px solid #f59e0b;
-          padding: 15px;
-          margin: 20px 0;
-          border-radius: 0 8px 8px 0;
-        }
-
-        .modal-info ul {
-          margin: 10px 0 0 0;
-          padding-left: 20px;
-        }
-
-        .modal-info li {
-          margin: 5px 0;
-          color: #92400e;
-        }
-
-        .modal-close-btn {
-          background: #22c55e;
-          color: white;
-          border: none;
-          padding: 12px 30px;
-          border-radius: 8px;
-          cursor: pointer;
-          font-size: 16px;
-          width: 100%;
-          transition: background 0.2s;
-        }
-
-        .modal-close-btn:hover {
-          background: #16a34a;
-        }
-      `}</style>
     </div>
   );
 };
