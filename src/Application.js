@@ -12,6 +12,11 @@ const Applications = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [processingId, setProcessingId] = useState(null);
+  const [verificationModal, setVerificationModal] = useState({
+    show: false,
+    applicationId: null,
+    code: ''
+  });
 
   useEffect(() => {
     fetchApplications();
@@ -31,24 +36,72 @@ const Applications = () => {
     }
   };
 
-  const handleDistribute = async (id) => {
-    if (!window.confirm('Are you sure you want to mark this application as distributed?')) {
+  const handleDistribute = (applicationId) => {
+    setVerificationModal({
+      show: true,
+      applicationId: applicationId,
+      code: ''
+    });
+  };
+
+  const handleVerificationSubmit = async () => {
+    if (!verificationModal.code.trim()) {
+      toast.error('Please enter the verification code');
       return;
     }
 
     try {
-      setProcessingId(id);
-      await axios.delete(`https://mds-backend-zlp1.onrender.com/api/applications/${id}`);
-      const updated = applications.filter(app => app.id !== id);
-      setApplications(updated);
-      setFilteredApps(updated);
-      toast.success('Application marked as distributed successfully!');
+      setProcessingId(verificationModal.applicationId);
+      
+      const response = await axios.delete(
+        `https://mds-backend-zlp1.onrender.com/api/applications/${verificationModal.applicationId}?code=${verificationModal.code}`
+      );
+
+      if (response.status === 200) {
+        const updated = applications.filter(app => app.id !== verificationModal.applicationId);
+        setApplications(updated);
+        setFilteredApps(updated);
+        
+        toast.success('Application marked as distributed successfully!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        
+        setVerificationModal({ show: false, applicationId: null, code: '' });
+      }
     } catch (err) {
       console.error("Distribution marking failed", err);
-      toast.error('Failed to mark application as distributed. Please try again.');
+      
+      if (err.response && err.response.status === 403) {
+        toast.error('Invalid verification code. Please check and try again.', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      } else {
+        toast.error('Failed to mark application as distributed. Please try again.', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      }
     } finally {
       setProcessingId(null);
     }
+  };
+
+  const handleModalClose = () => {
+    setVerificationModal({ show: false, applicationId: null, code: '' });
   };
 
   const handleSearch = (e) => {
@@ -254,6 +307,68 @@ const Applications = () => {
           </div>
         </div>
       </div>
+
+      {/* Verification Modal */}
+      {verificationModal.show && (
+        <div className="modal-overlay">
+          <div className="verification-modal">
+            <div className="modal-header">
+              <h3>Enter Verification Code</h3>
+              <button 
+                className="close-btn"
+                onClick={handleModalClose}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </div>
+            
+            <div className="modal-body">
+              <p>Please enter the verification code provided by the applicant to confirm distribution:</p>
+              
+              <div className="verification-input-group">
+                <label htmlFor="verificationCode">Verification Code:</label>
+                <input
+                  type="text"
+                  id="verificationCode"
+                  value={verificationModal.code}
+                  onChange={(e) => setVerificationModal({
+                    ...verificationModal,
+                    code: e.target.value
+                  })}
+                  placeholder="Enter 4 or 6 digit code"
+                  maxLength="6"
+                  className="verification-input"
+                />
+              </div>
+              
+              <div className="modal-actions">
+                <button 
+                  className="cancel-btn"
+                  onClick={handleModalClose}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className="confirm-btn"
+                  onClick={handleVerificationSubmit}
+                  disabled={processingId === verificationModal.applicationId}
+                >
+                  {processingId === verificationModal.applicationId ? (
+                    <>
+                      <div className="button-spinner"></div>
+                      Verifying...
+                    </>
+                  ) : (
+                    'Confirm Distribution'
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <ToastContainer 
         position="top-right"
