@@ -57,11 +57,14 @@ const Applications = () => {
         `https://mds-backend-zlp1.onrender.com/api/applications/${verificationModal.applicationId}?code=${verificationModal.code}`
       );
 
-      if (response.status === 200) {
+      // Check for successful response
+      if (response.status === 200 || response.status === 204) {
+        // Update state immediately
         const updated = applications.filter(app => app.id !== verificationModal.applicationId);
         setApplications(updated);
         setFilteredApps(updated);
         
+        // Show success message
         toast.success('Application marked as distributed successfully!', {
           position: "top-right",
           autoClose: 5000,
@@ -71,13 +74,50 @@ const Applications = () => {
           draggable: true,
         });
         
+        // Close modal
         setVerificationModal({ show: false, applicationId: null, code: '' });
       }
     } catch (err) {
       console.error("Distribution marking failed", err);
       
-      if (err.response && err.response.status === 403) {
-        toast.error('Invalid verification code. Please check and try again.', {
+      // Handle different error scenarios
+      if (err.response) {
+        const status = err.response.status;
+        const errorMessage = err.response.data?.message || err.response.data?.error;
+        
+        if (status === 403 || status === 401) {
+          toast.error(errorMessage || 'Invalid verification code. Please check and try again.', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        } else if (status === 404) {
+          toast.error('Application not found. It may have been already processed.', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          // Refresh the applications list
+          fetchApplications();
+        } else {
+          toast.error(errorMessage || 'Failed to mark application as distributed. Please try again.', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        }
+      } else if (err.request) {
+        // Network error
+        toast.error('Network error. Please check your connection and try again.', {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -86,7 +126,8 @@ const Applications = () => {
           draggable: true,
         });
       } else {
-        toast.error('Failed to mark application as distributed. Please try again.', {
+        // Other errors
+        toast.error('An unexpected error occurred. Please try again.', {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -96,11 +137,14 @@ const Applications = () => {
         });
       }
     } finally {
+      // Always clear processing state
       setProcessingId(null);
     }
   };
 
   const handleModalClose = () => {
+    // Clear processing state when closing modal
+    setProcessingId(null);
     setVerificationModal({ show: false, applicationId: null, code: '' });
   };
 
@@ -137,11 +181,17 @@ const Applications = () => {
 
   const stats = getApplicationStats();
 
+  // Handle Enter key press in verification input
+  const handleVerificationKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleVerificationSubmit();
+    }
+  };
+
   return (
     <div className="applications-container">
       <Navbar2 />
       
-
       {/* Page Header */}
       <div className="page-header">
         <h1>Medicine Applications</h1>
@@ -310,13 +360,19 @@ const Applications = () => {
 
       {/* Verification Modal */}
       {verificationModal.show && (
-        <div className="modal-overlay">
+        <div className="modal-overlay" onClick={(e) => {
+          // Close modal only if clicking on overlay, not on modal content
+          if (e.target === e.currentTarget) {
+            handleModalClose();
+          }
+        }}>
           <div className="verification-modal">
             <div className="modal-header">
               <h3>Enter Verification Code</h3>
               <button 
                 className="close-btn"
                 onClick={handleModalClose}
+                disabled={processingId === verificationModal.applicationId}
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -337,9 +393,12 @@ const Applications = () => {
                     ...verificationModal,
                     code: e.target.value
                   })}
+                  onKeyPress={handleVerificationKeyPress}
                   placeholder="Enter 4 or 6 digit code"
                   maxLength="6"
                   className="verification-input"
+                  disabled={processingId === verificationModal.applicationId}
+                  autoFocus
                 />
               </div>
               
@@ -347,13 +406,14 @@ const Applications = () => {
                 <button 
                   className="cancel-btn"
                   onClick={handleModalClose}
+                  disabled={processingId === verificationModal.applicationId}
                 >
                   Cancel
                 </button>
                 <button 
                   className="confirm-btn"
                   onClick={handleVerificationSubmit}
-                  disabled={processingId === verificationModal.applicationId}
+                  disabled={processingId === verificationModal.applicationId || !verificationModal.code.trim()}
                 >
                   {processingId === verificationModal.applicationId ? (
                     <>
