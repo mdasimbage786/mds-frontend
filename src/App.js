@@ -49,8 +49,8 @@ function AnimatedRoutes() {
     <div className="fade-transition">
       <Routes location={location} key={location.pathname}>
         {/* Guest Routes */}
-        <Route path="/" element={<Home1 />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/Home1" element={<Home1 />} />
+        <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/medicines2" element={<Medicines2 />} />
         <Route path="/pendingdonations1" element={<PendingDonations1 />} />
