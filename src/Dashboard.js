@@ -21,8 +21,41 @@ const Dashboard = () => {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('https://mds-backend-zlp1.onrender.com/api/dashboard/stats');
-        setStats(response.data);
+        
+        // Fetch all required data
+        const [medicinesRes, pendingDonationsRes, applicationsRes] = await Promise.all([
+          axios.get('https://mds-backend-zlp1.onrender.com/api/medicines'),
+          axios.get('https://mds-backend-zlp1.onrender.com/api/pending-donations'),
+          axios.get('https://mds-backend-zlp1.onrender.com/api/applications')
+        ]);
+        
+        const medicines = medicinesRes.data;
+        const pendingDonations = pendingDonationsRes.data;
+        const applications = applicationsRes.data;
+        
+        // Calculate statistics
+        const availableMedicines = medicines.length;
+        const totalMedicineQuantity = medicines.reduce((sum, med) => sum + (med.quantity || 0), 0);
+        const pendingDonationsCount = pendingDonations.length;
+        const totalApplications = applications.length;
+        
+        // Count pending distributions (applications that haven't been distributed)
+        const pendingDistributions = applications.filter(app => 
+          app.status !== 'distributed' && app.status !== 'rejected'
+        ).length;
+        
+        // Calculate approved applications (total - pending distributions)
+        const approvedApplications = totalApplications - pendingDistributions;
+        
+        setStats({
+          availableMedicines,
+          totalMedicineQuantity,
+          pendingDonations: pendingDonationsCount,
+          pendingDistributions,
+          approvedApplications: Math.max(0, approvedApplications), // Ensure non-negative
+          totalApplications
+        });
+        
         setError(null);
       } catch (error) {
         console.error('Error fetching dashboard stats:', error);
@@ -89,13 +122,14 @@ const Dashboard = () => {
               <div className="stat-card donations">
                 <div className="stat-icon">
                   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12,6 12,12 16,14"/>
                   </svg>
                 </div>
                 <div className="stat-content">
                   <div className="stat-number">{stats.pendingDonations}</div>
-                  <div className="stat-label">Medicine Donations</div>
-                  <div className="stat-description">Available in inventory</div>
+                  <div className="stat-label">Pending Donations</div>
+                  <div className="stat-description">Awaiting collection</div>
                 </div>
               </div>
 
@@ -122,8 +156,8 @@ const Dashboard = () => {
                 </div>
                 <div className="stat-content">
                   <div className="stat-number">{stats.approvedApplications}</div>
-                  <div className="stat-label">Approved Applications</div>
-                  <div className="stat-description">Medicines allocated</div>
+                  <div className="stat-label">Completed Distributions</div>
+                  <div className="stat-description">Successfully distributed</div>
                 </div>
               </div>
             </div>
@@ -133,7 +167,7 @@ const Dashboard = () => {
                 <h3>System Overview</h3>
                 <div className="insight-grid">
                   <div className="insight-item">
-                    <div className="insight-label">Approval Rate</div>
+                    <div className="insight-label">Distribution Rate</div>
                     <div className="insight-value">
                       {stats.totalApplications > 0 
                         ? Math.round((stats.approvedApplications / stats.totalApplications) * 100) 
@@ -156,16 +190,17 @@ const Dashboard = () => {
                 <div className="action-buttons">
                   <button className="action-btn primary" onClick={() => window.location.href = '/PendingDonations'}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12,6 12,12 16,14"/>
                     </svg>
-                    Review Pending Donations
+                    Review Pending Donations ({stats.pendingDonations})
                   </button>
                   <button className="action-btn secondary" onClick={() => window.location.href = '/application'}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <circle cx="12" cy="12" r="10"/>
                       <polyline points="12,6 12,12 16,14"/>
                     </svg>
-                    Process Distribution Requests
+                    Process Distribution Requests ({stats.pendingDistributions})
                   </button>
                   <button className="action-btn tertiary" onClick={handleRefresh}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
