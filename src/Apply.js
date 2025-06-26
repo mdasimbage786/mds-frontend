@@ -92,68 +92,72 @@ const Apply = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      toast.error('Please fill all required fields correctly');
-      return;
-    }
+  e.preventDefault();
 
-    const selected = medicines.find(m => m.name === form.selectedMedicine);
-    if (!selected) {
-      toast.error("Invalid medicine selection.");
-      return;
-    }
+  if (!validateForm()) {
+    toast.error('Please fill all required fields correctly');
+    return;
+  }
 
-    const requestedQty = parseInt(form.quantity);
-    if (requestedQty > selected.quantity) {
-      toast.error(`Only ${selected.quantity} units available for ${selected.name}.`);
-      return;
-    }
+  const selected = medicines.find(m => m.name === form.selectedMedicine);
+  if (!selected) {
+    toast.error("Invalid medicine selection.");
+    return;
+  }
 
-    setLoading(true);
+  const requestedQty = parseInt(form.quantity);
+  if (requestedQty > selected.quantity) {
+    toast.error(`Only ${selected.quantity} units available for ${selected.name}.`);
+    return;
+  }
 
-    try {
-      const response = await axios.post('https://mds-backend-zlp1.onrender.com/api/applications', form);
+  setLoading(true);
 
-      if (response.status === 201 || response.status === 200) {
-        // Extract verification code from response
-        const applicationData = response.data;
-        setVerificationCode(applicationData.verificationCode);
-        setShowCode(true);
+  try {
+    const response = await axios.post('https://mds-backend-zlp1.onrender.com/api/applications', form);
 
-        const updatedQty = selected.quantity - requestedQty;
-        if (updatedQty > 0) {
-          await axios.put(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`, {
-            ...selected,
-            quantity: updatedQty
-          });
-        } else {
-          await axios.delete(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`);
-        }
+    if (response.status === 201 || response.status === 200) {
+      const applicationData = response.data;
+      setVerificationCode(applicationData.verificationCode);
+      setShowCode(true);
 
-        toast.success("Application submitted successfully! Please save your verification code.");
-
-        // Reset form
-        setForm({
-          selectedMedicine: '',
-          quantity: '',
-          ngo: '',
-          name: '',
-          mobile: '',
-          address: ''
+      // Update medicine quantity
+      const updatedQty = selected.quantity - requestedQty;
+      if (updatedQty > 0) {
+        await axios.put(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`, {
+          ...selected,
+          quantity: updatedQty
         });
-        setSearchCity('');
-        setFilteredNgos(ngos);
-        setErrors({});
+      } else {
+        await axios.delete(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`);
       }
-    } catch (error) {
-      console.error("Error submitting application:", error);
-      toast.error("Failed to submit application. Please try again.");
-    } finally {
-      setLoading(false);
+
+      toast.success("Application submitted successfully! Please save your verification code.");
+
+      setForm({
+        selectedMedicine: '',
+        quantity: '',
+        ngo: '',
+        name: '',
+        mobile: '',
+        address: ''
+      });
+      setSearchCity('');
+      setFilteredNgos(ngos);
+      setErrors({});
+
+      return; // ✅ Ensure exit from try block if successful
     }
-  };
+
+    // If response is not OK
+    toast.error("Unexpected response. Please try again.");
+  } catch (error) {
+    console.error("Error submitting application:", error);
+    toast.error("Failed to submit application. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const copyCodeToClipboard = () => {
     navigator.clipboard.writeText(verificationCode);
