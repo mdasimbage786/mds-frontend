@@ -24,19 +24,25 @@ const BrandSwitcher = ({ currentBrand }) => {
       icon: 'M',
       name: 'MediCare',
       color: '#667eea',
-      redirectPath: '/login'
+      redirectPath: '/login',
+      homeRoute: '/Home', // Route when logged in as user
+      requiredRole: 'user'
     },
     guest: {
       icon: 'G',
       name: 'Guest Panel',
       color: '#10b981',
-      redirectPath: '/'
+      redirectPath: '/',
+      homeRoute: '/',
+      requiredRole: null // No login required
     },
     admin: {
       icon: 'A',
       name: 'Admin Panel',
       color: '#f59e0b',
-      redirectPath: '/Login'
+      redirectPath: '/Login',
+      homeRoute: '/medicines1', // Route when logged in as ngo
+      requiredRole: 'ngo'
     }
   };
 
@@ -45,6 +51,37 @@ const BrandSwitcher = ({ currentBrand }) => {
     if (currentBrand === 'guest') return key !== 'guest';
     return key !== currentBrand && key !== 'guest';
   });
+
+  // Function to check if user is logged in and get their role
+  const getUserLoginStatus = () => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const userRole = localStorage.getItem('role');
+    const token = localStorage.getItem('token');
+    
+    return {
+      isLoggedIn: isLoggedIn && token,
+      role: userRole
+    };
+  };
+
+  // Function to determine redirect path based on login status
+  const getRedirectPath = (targetBrand) => {
+    const { isLoggedIn, role } = getUserLoginStatus();
+    const brandConfig = brands[targetBrand];
+    
+    // If no login required (guest panel)
+    if (!brandConfig.requiredRole) {
+      return brandConfig.redirectPath;
+    }
+    
+    // If user is logged in with the correct role for the target brand
+    if (isLoggedIn && role === brandConfig.requiredRole) {
+      return brandConfig.homeRoute;
+    }
+    
+    // If user is logged in but with wrong role, or not logged in, go to login
+    return brandConfig.redirectPath;
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -64,7 +101,8 @@ const BrandSwitcher = ({ currentBrand }) => {
 
   const handleBrandSwitch = (brandKey) => {
     setIsDropdownOpen(false);
-    navigate(brands[brandKey].redirectPath);
+    const redirectPath = getRedirectPath(brandKey);
+    navigate(redirectPath);
   };
 
   const getBrandIconStyle = (color, size = 'normal') => {
@@ -95,6 +133,23 @@ const BrandSwitcher = ({ currentBrand }) => {
     };
   };
 
+  // Function to get dropdown item display text with login status indicator
+  const getDropdownItemText = (brandKey, brandData) => {
+    if (isMobile) return null;
+    
+    const { isLoggedIn, role } = getUserLoginStatus();
+    const brandConfig = brands[brandKey];
+    
+    let statusText = '';
+    if (brandConfig.requiredRole) {
+      if (isLoggedIn && role === brandConfig.requiredRole) {
+        statusText = ' ✓';
+      }
+    }
+    
+    return `${brandData.name}${statusText}`;
+  };
+
   return (
     <div style={styles.brandSwitcher} ref={dropdownRef}>
       <div style={styles.navbarBrand} onClick={handleBrandClick}>
@@ -118,33 +173,48 @@ const BrandSwitcher = ({ currentBrand }) => {
           ...(isMobile ? styles.brandDropdownMobile : {})
         }}>
           {!isMobile && <div style={styles.dropdownHeader}>Switch to:</div>}
-          {otherBrands.map(([brandKey, brandData]) => (
-            <div
-              key={brandKey}
-              style={{
-                ...styles.dropdownItem,
-                ...(isMobile ? styles.dropdownItemMobile : {})
-              }}
-              onClick={() => handleBrandSwitch(brandKey)}
-              onMouseEnter={(e) => {
-                if (!isMobile) {
-                  e.target.style.background = 'linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1))';
-                  e.target.style.transform = 'translateX(4px)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isMobile) {
-                  e.target.style.background = 'transparent';
-                  e.target.style.transform = 'translateX(0)';
-                }
-              }}
-            >
-              <div style={getBrandIconStyle(brandData.color, isMobile ? 'large' : 'normal')}>
-                {brandData.icon}
+          {otherBrands.map(([brandKey, brandData]) => {
+            const { isLoggedIn, role } = getUserLoginStatus();
+            const brandConfig = brands[brandKey];
+            const canDirectAccess = !brandConfig.requiredRole || (isLoggedIn && role === brandConfig.requiredRole);
+            
+            return (
+              <div
+                key={brandKey}
+                style={{
+                  ...styles.dropdownItem,
+                  ...(isMobile ? styles.dropdownItemMobile : {}),
+                  ...(canDirectAccess ? styles.dropdownItemAccessible : {})
+                }}
+                onClick={() => handleBrandSwitch(brandKey)}
+                onMouseEnter={(e) => {
+                  if (!isMobile) {
+                    const bgColor = canDirectAccess 
+                      ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1))'
+                      : 'linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1))';
+                    e.target.style.background = bgColor;
+                    e.target.style.transform = 'translateX(4px)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isMobile) {
+                    e.target.style.background = 'transparent';
+                    e.target.style.transform = 'translateX(0)';
+                  }
+                }}
+                title={canDirectAccess ? 'Direct access available' : 'Login required'}
+              >
+                <div style={getBrandIconStyle(brandData.color, isMobile ? 'large' : 'normal')}>
+                  {brandData.icon}
+                </div>
+                {!isMobile && (
+                  <span style={styles.dropdownText}>
+                    {getDropdownItemText(brandKey, brandData)}
+                  </span>
+                )}
               </div>
-              {!isMobile && <span style={styles.dropdownText}>{brandData.name}</span>}
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
@@ -227,6 +297,9 @@ const styles = {
     gap: '0',
     justifyContent: 'center',
     minHeight: '60px'
+  },
+  dropdownItemAccessible: {
+    borderLeft: '3px solid #10b981'
   },
   dropdownText: {
     fontSize: '0.9rem',
