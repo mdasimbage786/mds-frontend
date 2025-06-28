@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Login.css';
 import axios from 'axios';
@@ -13,6 +13,54 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = new URLSearchParams(location.search).get('from');
+
+  // Check if user is already logged in and redirect appropriately
+  useEffect(() => {
+    const checkExistingLogin = () => {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      const userRole = localStorage.getItem('role');
+      const token = localStorage.getItem('token');
+
+      if (isLoggedIn && token && userRole) {
+        // Determine where to redirect based on current path and user role
+        const currentPath = location.pathname;
+        
+        if (currentPath === '/login' && userRole === 'user') {
+          // User is logged in and accessing medicare login
+          toast.info('You are already logged in as a user.');
+          setTimeout(() => navigate('/Home'), 1000);
+          return;
+        }
+        
+        if (currentPath === '/Login' && userRole === 'ngo') {
+          // NGO is logged in and accessing admin login
+          toast.info('You are already logged in as an NGO.');
+          setTimeout(() => navigate('/medicines1'), 1000);
+          return;
+        }
+        
+        // Handle redirection from guest panel
+        if (from) {
+          if (from === 'pendingdonations' && userRole === 'ngo') {
+            navigate('/PendingDonations');
+            return;
+          } else if (from === 'applications' && userRole === 'ngo') {
+            navigate('/application');
+            return;
+          }
+        }
+        
+        // Default redirections based on role
+        if (userRole === 'user' && currentPath === '/login') {
+          navigate('/Home');
+        } else if (userRole === 'ngo' && currentPath === '/Login') {
+          navigate('/medicines1');
+        }
+      }
+    };
+
+    checkExistingLogin();
+  }, [navigate, location, from]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -46,12 +94,46 @@ const Login = () => {
     }
   };
 
+  const handleRoleChange = (newRole) => {
+    // Clear form data when switching roles
+    setFormData({ email: '', password: '', ngoId: '' });
+    setErrors({});
+    setRole(newRole);
+  };
+
+  const getRedirectPath = (userRole, from) => {
+    if (userRole === 'ngo') {
+      if (from === 'pendingdonations') {
+        return '/PendingDonations';
+      } else if (from === 'applications') {
+        return '/application';
+      } else {
+        return '/medicines1';
+      }
+    } else {
+      return '/Home';
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
       toast.error('Please fill all required fields correctly');
       return;
+    }
+
+    // Check if user is trying to login with a different role than they're already logged in with
+    const existingRole = localStorage.getItem('role');
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    
+    if (isLoggedIn && existingRole && existingRole !== role) {
+      // Clear previous session before logging in with different role
+      localStorage.removeItem('token');
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('role');
+      localStorage.removeItem('ngoId');
+      toast.info(`Switching from ${existingRole} to ${role} account...`);
     }
 
     const endpoint =
@@ -83,17 +165,8 @@ const Login = () => {
 
         toast.success('Login successful! Redirecting...');
         setTimeout(() => {
-          if (role === 'ngo') {
-            if (from === 'pendingdonations') {
-              navigate('/PendingDonations');
-            } else if (from === 'applications') {
-              navigate('/application');
-            } else {
-              navigate('/medicines1');
-            }
-          } else {
-            navigate('/Home');
-          }
+          const redirectPath = getRedirectPath(role, from);
+          navigate(redirectPath);
         }, 1000);
       } else {
         toast.error('Invalid login credentials.');
@@ -122,14 +195,14 @@ const Login = () => {
                 <button
                   type="button"
                   className={`role-tab ${role === 'user' ? 'active' : ''}`}
-                  onClick={() => setRole('user')}
+                  onClick={() => handleRoleChange('user')}
                 >
                   👤 User
                 </button>
                 <button
                   type="button"
                   className={`role-tab ${role === 'ngo' ? 'active' : ''}`}
-                  onClick={() => setRole('ngo')}
+                  onClick={() => handleRoleChange('ngo')}
                 >
                   🏢 NGO
                 </button>
