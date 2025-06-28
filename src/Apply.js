@@ -114,26 +114,64 @@ const Apply = () => {
   setLoading(true);
 
   try {
+    // Submit application
+    console.log('Submitting application...', form);
     const response = await axios.post('https://mds-backend-zlp1.onrender.com/api/applications', form);
+    
+    console.log('Application response:', response);
+    console.log('Response status:', response.status);
+    console.log('Response data:', response.data);
 
+    // Check if submission was successful
     if (response.status === 201 || response.status === 200) {
       const applicationData = response.data;
+      
+      // Check if verification code exists in response
+      if (!applicationData.verificationCode) {
+        console.error('No verification code in response:', applicationData);
+        toast.error("Application submitted but verification code not received. Please contact support.");
+        return;
+      }
+
+      // Set verification code and show success screen
       setVerificationCode(applicationData.verificationCode);
       setShowCode(true);
 
       // Update medicine quantity
-      const updatedQty = selected.quantity - requestedQty;
-      if (updatedQty > 0) {
-        await axios.put(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`, {
-          ...selected,
-          quantity: updatedQty
-        });
-      } else {
-        await axios.delete(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`);
+      try {
+        const updatedQty = selected.quantity - requestedQty;
+        console.log(`Updating medicine quantity: ${selected.quantity} - ${requestedQty} = ${updatedQty}`);
+        
+        if (updatedQty > 0) {
+          const updateResponse = await axios.put(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`, {
+            ...selected,
+            quantity: updatedQty
+          });
+          console.log('Medicine update response:', updateResponse);
+        } else {
+          const deleteResponse = await axios.delete(`https://mds-backend-zlp1.onrender.com/api/medicines/${selected.id}`);
+          console.log('Medicine delete response:', deleteResponse);
+        }
+
+        // Update local state to reflect changes
+        setMedicines(prevMedicines => 
+          prevMedicines.map(med => 
+            med.id === selected.id 
+              ? (updatedQty > 0 ? { ...med, quantity: updatedQty } : null)
+              : med
+          ).filter(Boolean) // Remove null entries (deleted medicines)
+        );
+
+      } catch (medicineUpdateError) {
+        console.error("Error updating medicine quantity:", medicineUpdateError);
+        // Don't show error to user as application was submitted successfully
+        // Just log for debugging
       }
 
+      // Show success message
       toast.success("Application submitted successfully! Please save your verification code.");
 
+      // Reset form
       setForm({
         selectedMedicine: '',
         quantity: '',
@@ -146,14 +184,37 @@ const Apply = () => {
       setFilteredNgos(ngos);
       setErrors({});
 
-      return; // ✅ Ensure exit from try block if successful
+    } else {
+      // Unexpected status code
+      console.error("Unexpected response status:", response.status);
+      toast.error("Unexpected response. Please try again.");
     }
 
-    // If response is not OK
-    toast.error("Unexpected response. Please try again.");
   } catch (error) {
     console.error("Error submitting application:", error);
-    toast.error("Failed to submit application. Please try again.");
+    
+    // More detailed error handling
+    if (error.response) {
+      // Server responded with error status
+      console.error("Server error response:", error.response.data);
+      console.error("Server error status:", error.response.status);
+      
+      if (error.response.status === 400) {
+        toast.error("Invalid application data. Please check your inputs.");
+      } else if (error.response.status === 500) {
+        toast.error("Server error. Please try again later.");
+      } else {
+        toast.error(`Server error: ${error.response.status}. Please try again.`);
+      }
+    } else if (error.request) {
+      // Network error
+      console.error("Network error:", error.request);
+      toast.error("Network error. Please check your connection and try again.");
+    } else {
+      // Other error
+      console.error("Unknown error:", error.message);
+      toast.error("An unexpected error occurred. Please try again.");
+    }
   } finally {
     setLoading(false);
   }
