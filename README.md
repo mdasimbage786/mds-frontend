@@ -255,7 +255,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Mohd Asim Bage**
 
 - GitHub: [@mdasimbage786](https://github.com/mdasimbage786)
-- LinkedIn: [[Your LinkedIn Profile](https://www.linkedin.com/in/mohammedasim-bage-4290b22a9)]
+- LinkedIn: [[LinkedIn Profile](https://www.linkedin.com/in/mohammedasim-bage-4290b22a9)]
 - Email: mdasimbage786@gmail.com
 
 ## 🙏 Acknowledgments
