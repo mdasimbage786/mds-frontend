@@ -215,13 +215,25 @@ api.interceptors.request.use((config) => {
 
 ```markdown
 ### Landing Page
-![Landing Page](screenshots/landing.png)
+![Landing Page](screenshots/landing.jpg)
 
-### User Dashboard
-![User Dashboard](screenshots/dashboard.png)
+### Available Medicines
+![User Dashboard](screenshots/medicines.jpg)
 
 ### Medicine Donation
-![Donation](screenshots/donate.png)
+![Donation](screenshots/donation.jpg)
+
+### Medicine Application
+![Landing Page](screenshots/application.jpg)
+
+### NGO Dashboard
+![User Dashboard](screenshots/dashboard.jpg)
+
+### Medicine Donate Form
+![Donation](screenshots/donate.jpg)
+
+### Medicine Apply Form
+![Donation](screenshots/apply.jpg)
 ```
 
 ## 🤝 Contributing
